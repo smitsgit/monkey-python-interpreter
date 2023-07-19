@@ -14,7 +14,8 @@ class CalcLexer(Lexer):
     tokens = {NUMBER, ID, WHILE, IF, ELSE, PRINT,
               PLUS, MINUS, TIMES, DIVIDE, ASSIGN,
               EQ, LT, LE, GT, GE, NE, FUNC, LET, LPAREN,
-              RPAREN, LBRACE, RBRACE, SEMICOLON, COMMA, RETURN, NOT}
+              RPAREN, LBRACE, RBRACE, SEMICOLON, COMMA, RETURN, NOT,
+              TRUE, FALSE}
 
     # String containing ignored characters
     ignore = ' \t'
@@ -52,6 +53,8 @@ class CalcLexer(Lexer):
     ID['let'] = LET
     ID['fn'] = FUNC
     ID['return'] = RETURN
+    ID['true'] = TRUE
+    ID['false'] = FALSE
 
     ignore_comment = r'\#.*'
 
@@ -75,7 +78,11 @@ program : statements
 statements : statements statement 
            | statement 
 
-statement : LET ID EQ expr           
+statement : let_statement  | if_statement | return_statement
+
+let_statement: LET ID EQ expr
+
+if_statement: if (expr) LBRACE statements RBRACE else LBRACE statements RBRACE         
 
 '''
 
@@ -100,6 +107,26 @@ class CalcParser(Parser):
     def statements(self, p):
         return [p.statement]
 
+    @_('blk_statements')
+    def statements(self, p):
+        return p.blk_statements
+
+    @_('LBRACE statements RBRACE')
+    def blk_statements(self, p):
+        return p.statements
+
+    # @_('let_statement')
+    # def statement(self, p):
+    #     return [p.statement]
+    #
+    # @_('return_statement')
+    # def statement(self, p):
+    #     return [p.statement]
+    #
+    # @_('if_statement')
+    # def statement(self, p):
+    #     return [p.statement]
+
     @_('LET ID ASSIGN expr SEMICOLON')
     def statement(self, p):
         return ('let', p.ID ,p.expr)
@@ -107,6 +134,10 @@ class CalcParser(Parser):
     @_('RETURN expr SEMICOLON')
     def statement(self, p):
         return ('return', p.expr)
+
+    @_('IF expr statements ELSE statements')
+    def statement(self, p):
+        return ('if', p.expr, p.statements0, p.statements1)
 
     @_('expr PLUS expr', 'expr MINUS expr')
     def expr(self, p):
@@ -123,7 +154,7 @@ class CalcParser(Parser):
 
     @_('LPAREN expr RPAREN')
     def expr(self, p):
-        return (p.expr)
+        return ('grouped-expression', p.expr)
 
     @_('MINUS expr %prec UMINUS')
     def expr(self, p):
@@ -132,6 +163,10 @@ class CalcParser(Parser):
     @_('NOT expr')
     def expr(self, p):
         return ('!', p.expr)
+
+    @_('TRUE', 'FALSE')
+    def expr(self, p):
+        return ('Bool', p[0])
 
     @_('NUMBER')
     def expr(self, p):
@@ -144,7 +179,7 @@ class CalcParser(Parser):
 
 if __name__ == '__main__':
     data = '''
-        let five = 3 + 4 * 5 == 3 * 1 + 4 * 5;
+       if (3 < 5) { let five = 5; return 5; } else { return 3;}
 '''
     lexer = CalcLexer()
     for tok in lexer.tokenize(data):
