@@ -139,6 +139,22 @@ class CalcParser(Parser):
     def statement(self, p):
         return ('if', p.expr, p.statements0, p.statements1)
 
+    @_('FUNC LPAREN params RPAREN statements')
+    def statement(self, p):
+        return ('function', p.params, p.statements)
+
+    @_('params COMMA param')
+    def params(self, p):
+        return p.params + [p.param]
+
+    @_('param')
+    def params(self, p):
+        return [p.param]
+
+    @_('ID')
+    def param(self, p):
+        return p.ID
+
     @_('expr PLUS expr', 'expr MINUS expr')
     def expr(self, p):
         return (p[1], p.expr0, p.expr1)
@@ -179,7 +195,7 @@ class CalcParser(Parser):
 
 if __name__ == '__main__':
     data = '''
-       if (3 < 5) { let five = 5; return 5; } else { return 3;}
+       fn(x, y, z) { let five = 5; return x + y; }
 '''
     lexer = CalcLexer()
     for tok in lexer.tokenize(data):

@@ -5,73 +5,77 @@ Rule 1     statements -> blk_statements
 Rule 2     statements -> statement
 Rule 3     statements -> statements statement
 Rule 4     blk_statements -> LBRACE statements RBRACE
-Rule 5     statement -> IF expr statements ELSE statements
-Rule 6     statement -> RETURN expr SEMICOLON
-Rule 7     statement -> LET ID ASSIGN expr SEMICOLON
-Rule 8     expr -> ID
-Rule 9     expr -> NUMBER
-Rule 10    expr -> FALSE
-Rule 11    expr -> TRUE
-Rule 12    expr -> NOT expr  [precedence=right, level=5]
-Rule 13    expr -> MINUS expr  [precedence=right, level=5]
-Rule 14    expr -> LPAREN expr RPAREN
-Rule 15    expr -> expr NE expr  [precedence=left, level=1]
-Rule 16    expr -> expr EQ expr  [precedence=left, level=1]
-Rule 17    expr -> expr GT expr  [precedence=left, level=2]
-Rule 18    expr -> expr LT expr  [precedence=left, level=2]
-Rule 19    expr -> expr DIVIDE expr  [precedence=left, level=4]
-Rule 20    expr -> expr TIMES expr  [precedence=left, level=4]
-Rule 21    expr -> expr MINUS expr  [precedence=left, level=3]
-Rule 22    expr -> expr PLUS expr  [precedence=left, level=3]
+Rule 5     statement -> FUNC LPAREN params RPAREN statements
+Rule 6     statement -> IF expr statements ELSE statements
+Rule 7     statement -> RETURN expr SEMICOLON
+Rule 8     statement -> LET ID ASSIGN expr SEMICOLON
+Rule 9     params -> param
+Rule 10    params -> params COMMA param
+Rule 11    param -> ID
+Rule 12    expr -> ID
+Rule 13    expr -> NUMBER
+Rule 14    expr -> FALSE
+Rule 15    expr -> TRUE
+Rule 16    expr -> NOT expr  [precedence=right, level=5]
+Rule 17    expr -> MINUS expr  [precedence=right, level=5]
+Rule 18    expr -> LPAREN expr RPAREN
+Rule 19    expr -> expr NE expr  [precedence=left, level=1]
+Rule 20    expr -> expr EQ expr  [precedence=left, level=1]
+Rule 21    expr -> expr GT expr  [precedence=left, level=2]
+Rule 22    expr -> expr LT expr  [precedence=left, level=2]
+Rule 23    expr -> expr DIVIDE expr  [precedence=left, level=4]
+Rule 24    expr -> expr TIMES expr  [precedence=left, level=4]
+Rule 25    expr -> expr MINUS expr  [precedence=left, level=3]
+Rule 26    expr -> expr PLUS expr  [precedence=left, level=3]
 
 Unused terminals:
 
+    GE
     LE
     WHILE
-    COMMA
-    FUNC
     PRINT
-    GE
 
 Terminals, with rules where they appear:
 
-ASSIGN               : 7
-COMMA                : 
-DIVIDE               : 19
-ELSE                 : 5
-EQ                   : 16
-FALSE                : 10
-FUNC                 : 
+ASSIGN               : 8
+COMMA                : 10
+DIVIDE               : 23
+ELSE                 : 6
+EQ                   : 20
+FALSE                : 14
+FUNC                 : 5
 GE                   : 
-GT                   : 17
-ID                   : 7 8
-IF                   : 5
+GT                   : 21
+ID                   : 8 11 12
+IF                   : 6
 LBRACE               : 4
 LE                   : 
-LET                  : 7
-LPAREN               : 14
-LT                   : 18
-MINUS                : 13 21
-NE                   : 15
-NOT                  : 12
-NUMBER               : 9
-PLUS                 : 22
+LET                  : 8
+LPAREN               : 5 18
+LT                   : 22
+MINUS                : 17 25
+NE                   : 19
+NOT                  : 16
+NUMBER               : 13
+PLUS                 : 26
 PRINT                : 
 RBRACE               : 4
-RETURN               : 6
-RPAREN               : 14
-SEMICOLON            : 6 7
-TIMES                : 20
-TRUE                 : 11
+RETURN               : 7
+RPAREN               : 5 18
+SEMICOLON            : 7 8
+TIMES                : 24
+TRUE                 : 15
 WHILE                : 
 error                : 
 
 Nonterminals, with rules where they appear:
 
 blk_statements       : 1
-expr                 : 5 6 7 12 13 14 15 15 16 16 17 17 18 18 19 19 20 20 21 21 22 22
+expr                 : 6 7 8 16 17 18 19 19 20 20 21 21 22 22 23 23 24 24 25 25 26 26
+param                : 9 10
+params               : 5 10
 statement            : 2 3
-statements           : 3 4 5 5 0
+statements           : 3 4 5 6 6 0
 
 
 state 0
@@ -81,13 +85,15 @@ state 0
     (2) statements -> . statement
     (3) statements -> . statements statement
     (4) blk_statements -> . LBRACE statements RBRACE
-    (5) statement -> . IF expr statements ELSE statements
-    (6) statement -> . RETURN expr SEMICOLON
-    (7) statement -> . LET ID ASSIGN expr SEMICOLON
+    (5) statement -> . FUNC LPAREN params RPAREN statements
+    (6) statement -> . IF expr statements ELSE statements
+    (7) statement -> . RETURN expr SEMICOLON
+    (8) statement -> . LET ID ASSIGN expr SEMICOLON
     LBRACE          shift and go to state 4
-    IF              shift and go to state 5
-    RETURN          shift and go to state 6
-    LET             shift and go to state 7
+    FUNC            shift and go to state 5
+    IF              shift and go to state 6
+    RETURN          shift and go to state 7
+    LET             shift and go to state 8
 
     statements                     shift and go to state 1
     blk_statements                 shift and go to state 2
@@ -97,18 +103,21 @@ state 1
 
     (0) S' -> statements .
     (3) statements -> statements . statement
-    (5) statement -> . IF expr statements ELSE statements
-    (6) statement -> . RETURN expr SEMICOLON
-    (7) statement -> . LET ID ASSIGN expr SEMICOLON
-    IF              shift and go to state 5
-    RETURN          shift and go to state 6
-    LET             shift and go to state 7
+    (5) statement -> . FUNC LPAREN params RPAREN statements
+    (6) statement -> . IF expr statements ELSE statements
+    (7) statement -> . RETURN expr SEMICOLON
+    (8) statement -> . LET ID ASSIGN expr SEMICOLON
+    FUNC            shift and go to state 5
+    IF              shift and go to state 6
+    RETURN          shift and go to state 7
+    LET             shift and go to state 8
 
-    statement                      shift and go to state 8
+    statement                      shift and go to state 9
 
 state 2
 
     (1) statements -> blk_statements .
+    FUNC            reduce using rule 1 (statements -> blk_statements .)
     IF              reduce using rule 1 (statements -> blk_statements .)
     RETURN          reduce using rule 1 (statements -> blk_statements .)
     LET             reduce using rule 1 (statements -> blk_statements .)
@@ -120,6 +129,7 @@ state 2
 state 3
 
     (2) statements -> statement .
+    FUNC            reduce using rule 2 (statements -> statement .)
     IF              reduce using rule 2 (statements -> statement .)
     RETURN          reduce using rule 2 (statements -> statement .)
     LET             reduce using rule 2 (statements -> statement .)
@@ -135,83 +145,92 @@ state 4
     (2) statements -> . statement
     (3) statements -> . statements statement
     (4) blk_statements -> . LBRACE statements RBRACE
-    (5) statement -> . IF expr statements ELSE statements
-    (6) statement -> . RETURN expr SEMICOLON
-    (7) statement -> . LET ID ASSIGN expr SEMICOLON
+    (5) statement -> . FUNC LPAREN params RPAREN statements
+    (6) statement -> . IF expr statements ELSE statements
+    (7) statement -> . RETURN expr SEMICOLON
+    (8) statement -> . LET ID ASSIGN expr SEMICOLON
     LBRACE          shift and go to state 4
-    IF              shift and go to state 5
-    RETURN          shift and go to state 6
-    LET             shift and go to state 7
+    FUNC            shift and go to state 5
+    IF              shift and go to state 6
+    RETURN          shift and go to state 7
+    LET             shift and go to state 8
 
-    statements                     shift and go to state 9
+    statements                     shift and go to state 10
     blk_statements                 shift and go to state 2
     statement                      shift and go to state 3
 
 state 5
 
-    (5) statement -> IF . expr statements ELSE statements
-    (8) expr -> . ID
-    (9) expr -> . NUMBER
-    (10) expr -> . FALSE
-    (11) expr -> . TRUE
-    (12) expr -> . NOT expr
-    (13) expr -> . MINUS expr
-    (14) expr -> . LPAREN expr RPAREN
-    (15) expr -> . expr NE expr
-    (16) expr -> . expr EQ expr
-    (17) expr -> . expr GT expr
-    (18) expr -> . expr LT expr
-    (19) expr -> . expr DIVIDE expr
-    (20) expr -> . expr TIMES expr
-    (21) expr -> . expr MINUS expr
-    (22) expr -> . expr PLUS expr
-    ID              shift and go to state 11
-    NUMBER          shift and go to state 12
-    FALSE           shift and go to state 13
-    TRUE            shift and go to state 14
-    NOT             shift and go to state 15
-    MINUS           shift and go to state 16
-    LPAREN          shift and go to state 17
+    (5) statement -> FUNC . LPAREN params RPAREN statements
+    LPAREN          shift and go to state 11
 
-    expr                           shift and go to state 10
 
 state 6
 
-    (6) statement -> RETURN . expr SEMICOLON
-    (8) expr -> . ID
-    (9) expr -> . NUMBER
-    (10) expr -> . FALSE
-    (11) expr -> . TRUE
-    (12) expr -> . NOT expr
-    (13) expr -> . MINUS expr
-    (14) expr -> . LPAREN expr RPAREN
-    (15) expr -> . expr NE expr
-    (16) expr -> . expr EQ expr
-    (17) expr -> . expr GT expr
-    (18) expr -> . expr LT expr
-    (19) expr -> . expr DIVIDE expr
-    (20) expr -> . expr TIMES expr
-    (21) expr -> . expr MINUS expr
-    (22) expr -> . expr PLUS expr
-    ID              shift and go to state 11
-    NUMBER          shift and go to state 12
-    FALSE           shift and go to state 13
-    TRUE            shift and go to state 14
-    NOT             shift and go to state 15
-    MINUS           shift and go to state 16
-    LPAREN          shift and go to state 17
+    (6) statement -> IF . expr statements ELSE statements
+    (12) expr -> . ID
+    (13) expr -> . NUMBER
+    (14) expr -> . FALSE
+    (15) expr -> . TRUE
+    (16) expr -> . NOT expr
+    (17) expr -> . MINUS expr
+    (18) expr -> . LPAREN expr RPAREN
+    (19) expr -> . expr NE expr
+    (20) expr -> . expr EQ expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr DIVIDE expr
+    (24) expr -> . expr TIMES expr
+    (25) expr -> . expr MINUS expr
+    (26) expr -> . expr PLUS expr
+    ID              shift and go to state 13
+    NUMBER          shift and go to state 14
+    FALSE           shift and go to state 15
+    TRUE            shift and go to state 16
+    NOT             shift and go to state 17
+    MINUS           shift and go to state 18
+    LPAREN          shift and go to state 19
 
-    expr                           shift and go to state 18
+    expr                           shift and go to state 12
 
 state 7
 
-    (7) statement -> LET . ID ASSIGN expr SEMICOLON
-    ID              shift and go to state 19
+    (7) statement -> RETURN . expr SEMICOLON
+    (12) expr -> . ID
+    (13) expr -> . NUMBER
+    (14) expr -> . FALSE
+    (15) expr -> . TRUE
+    (16) expr -> . NOT expr
+    (17) expr -> . MINUS expr
+    (18) expr -> . LPAREN expr RPAREN
+    (19) expr -> . expr NE expr
+    (20) expr -> . expr EQ expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr DIVIDE expr
+    (24) expr -> . expr TIMES expr
+    (25) expr -> . expr MINUS expr
+    (26) expr -> . expr PLUS expr
+    ID              shift and go to state 13
+    NUMBER          shift and go to state 14
+    FALSE           shift and go to state 15
+    TRUE            shift and go to state 16
+    NOT             shift and go to state 17
+    MINUS           shift and go to state 18
+    LPAREN          shift and go to state 19
 
+    expr                           shift and go to state 20
 
 state 8
 
+    (8) statement -> LET . ID ASSIGN expr SEMICOLON
+    ID              shift and go to state 21
+
+
+state 9
+
     (3) statements -> statements statement .
+    FUNC            reduce using rule 3 (statements -> statements statement .)
     IF              reduce using rule 3 (statements -> statements statement .)
     RETURN          reduce using rule 3 (statements -> statements statement .)
     LET             reduce using rule 3 (statements -> statements statement .)
@@ -220,246 +239,266 @@ state 8
     ELSE            reduce using rule 3 (statements -> statements statement .)
 
 
-state 9
+state 10
 
     (4) blk_statements -> LBRACE statements . RBRACE
     (3) statements -> statements . statement
-    (5) statement -> . IF expr statements ELSE statements
-    (6) statement -> . RETURN expr SEMICOLON
-    (7) statement -> . LET ID ASSIGN expr SEMICOLON
-    RBRACE          shift and go to state 20
-    IF              shift and go to state 5
-    RETURN          shift and go to state 6
-    LET             shift and go to state 7
+    (5) statement -> . FUNC LPAREN params RPAREN statements
+    (6) statement -> . IF expr statements ELSE statements
+    (7) statement -> . RETURN expr SEMICOLON
+    (8) statement -> . LET ID ASSIGN expr SEMICOLON
+    RBRACE          shift and go to state 22
+    FUNC            shift and go to state 5
+    IF              shift and go to state 6
+    RETURN          shift and go to state 7
+    LET             shift and go to state 8
 
-    statement                      shift and go to state 8
+    statement                      shift and go to state 9
 
-state 10
+state 11
 
-    (5) statement -> IF expr . statements ELSE statements
-    (15) expr -> expr . NE expr
-    (16) expr -> expr . EQ expr
-    (17) expr -> expr . GT expr
-    (18) expr -> expr . LT expr
-    (19) expr -> expr . DIVIDE expr
-    (20) expr -> expr . TIMES expr
-    (21) expr -> expr . MINUS expr
-    (22) expr -> expr . PLUS expr
+    (5) statement -> FUNC LPAREN . params RPAREN statements
+    (9) params -> . param
+    (10) params -> . params COMMA param
+    (11) param -> . ID
+    ID              shift and go to state 25
+
+    params                         shift and go to state 23
+    param                          shift and go to state 24
+
+state 12
+
+    (6) statement -> IF expr . statements ELSE statements
+    (19) expr -> expr . NE expr
+    (20) expr -> expr . EQ expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . DIVIDE expr
+    (24) expr -> expr . TIMES expr
+    (25) expr -> expr . MINUS expr
+    (26) expr -> expr . PLUS expr
     (1) statements -> . blk_statements
     (2) statements -> . statement
     (3) statements -> . statements statement
     (4) blk_statements -> . LBRACE statements RBRACE
-    (5) statement -> . IF expr statements ELSE statements
-    (6) statement -> . RETURN expr SEMICOLON
-    (7) statement -> . LET ID ASSIGN expr SEMICOLON
-    NE              shift and go to state 22
-    EQ              shift and go to state 23
-    GT              shift and go to state 24
-    LT              shift and go to state 25
-    DIVIDE          shift and go to state 26
-    TIMES           shift and go to state 27
-    MINUS           shift and go to state 28
-    PLUS            shift and go to state 29
+    (5) statement -> . FUNC LPAREN params RPAREN statements
+    (6) statement -> . IF expr statements ELSE statements
+    (7) statement -> . RETURN expr SEMICOLON
+    (8) statement -> . LET ID ASSIGN expr SEMICOLON
+    NE              shift and go to state 27
+    EQ              shift and go to state 28
+    GT              shift and go to state 29
+    LT              shift and go to state 30
+    DIVIDE          shift and go to state 31
+    TIMES           shift and go to state 32
+    MINUS           shift and go to state 33
+    PLUS            shift and go to state 34
     LBRACE          shift and go to state 4
-    IF              shift and go to state 5
-    RETURN          shift and go to state 6
-    LET             shift and go to state 7
+    FUNC            shift and go to state 5
+    IF              shift and go to state 6
+    RETURN          shift and go to state 7
+    LET             shift and go to state 8
 
-    statements                     shift and go to state 21
+    statements                     shift and go to state 26
     blk_statements                 shift and go to state 2
     statement                      shift and go to state 3
 
-state 11
-
-    (8) expr -> ID .
-    NE              reduce using rule 8 (expr -> ID .)
-    EQ              reduce using rule 8 (expr -> ID .)
-    GT              reduce using rule 8 (expr -> ID .)
-    LT              reduce using rule 8 (expr -> ID .)
-    DIVIDE          reduce using rule 8 (expr -> ID .)
-    TIMES           reduce using rule 8 (expr -> ID .)
-    MINUS           reduce using rule 8 (expr -> ID .)
-    PLUS            reduce using rule 8 (expr -> ID .)
-    LBRACE          reduce using rule 8 (expr -> ID .)
-    IF              reduce using rule 8 (expr -> ID .)
-    RETURN          reduce using rule 8 (expr -> ID .)
-    LET             reduce using rule 8 (expr -> ID .)
-    SEMICOLON       reduce using rule 8 (expr -> ID .)
-    RPAREN          reduce using rule 8 (expr -> ID .)
-
-
-state 12
-
-    (9) expr -> NUMBER .
-    NE              reduce using rule 9 (expr -> NUMBER .)
-    EQ              reduce using rule 9 (expr -> NUMBER .)
-    GT              reduce using rule 9 (expr -> NUMBER .)
-    LT              reduce using rule 9 (expr -> NUMBER .)
-    DIVIDE          reduce using rule 9 (expr -> NUMBER .)
-    TIMES           reduce using rule 9 (expr -> NUMBER .)
-    MINUS           reduce using rule 9 (expr -> NUMBER .)
-    PLUS            reduce using rule 9 (expr -> NUMBER .)
-    LBRACE          reduce using rule 9 (expr -> NUMBER .)
-    IF              reduce using rule 9 (expr -> NUMBER .)
-    RETURN          reduce using rule 9 (expr -> NUMBER .)
-    LET             reduce using rule 9 (expr -> NUMBER .)
-    SEMICOLON       reduce using rule 9 (expr -> NUMBER .)
-    RPAREN          reduce using rule 9 (expr -> NUMBER .)
-
-
 state 13
 
-    (10) expr -> FALSE .
-    NE              reduce using rule 10 (expr -> FALSE .)
-    EQ              reduce using rule 10 (expr -> FALSE .)
-    GT              reduce using rule 10 (expr -> FALSE .)
-    LT              reduce using rule 10 (expr -> FALSE .)
-    DIVIDE          reduce using rule 10 (expr -> FALSE .)
-    TIMES           reduce using rule 10 (expr -> FALSE .)
-    MINUS           reduce using rule 10 (expr -> FALSE .)
-    PLUS            reduce using rule 10 (expr -> FALSE .)
-    LBRACE          reduce using rule 10 (expr -> FALSE .)
-    IF              reduce using rule 10 (expr -> FALSE .)
-    RETURN          reduce using rule 10 (expr -> FALSE .)
-    LET             reduce using rule 10 (expr -> FALSE .)
-    SEMICOLON       reduce using rule 10 (expr -> FALSE .)
-    RPAREN          reduce using rule 10 (expr -> FALSE .)
+    (12) expr -> ID .
+    NE              reduce using rule 12 (expr -> ID .)
+    EQ              reduce using rule 12 (expr -> ID .)
+    GT              reduce using rule 12 (expr -> ID .)
+    LT              reduce using rule 12 (expr -> ID .)
+    DIVIDE          reduce using rule 12 (expr -> ID .)
+    TIMES           reduce using rule 12 (expr -> ID .)
+    MINUS           reduce using rule 12 (expr -> ID .)
+    PLUS            reduce using rule 12 (expr -> ID .)
+    LBRACE          reduce using rule 12 (expr -> ID .)
+    FUNC            reduce using rule 12 (expr -> ID .)
+    IF              reduce using rule 12 (expr -> ID .)
+    RETURN          reduce using rule 12 (expr -> ID .)
+    LET             reduce using rule 12 (expr -> ID .)
+    SEMICOLON       reduce using rule 12 (expr -> ID .)
+    RPAREN          reduce using rule 12 (expr -> ID .)
 
 
 state 14
 
-    (11) expr -> TRUE .
-    NE              reduce using rule 11 (expr -> TRUE .)
-    EQ              reduce using rule 11 (expr -> TRUE .)
-    GT              reduce using rule 11 (expr -> TRUE .)
-    LT              reduce using rule 11 (expr -> TRUE .)
-    DIVIDE          reduce using rule 11 (expr -> TRUE .)
-    TIMES           reduce using rule 11 (expr -> TRUE .)
-    MINUS           reduce using rule 11 (expr -> TRUE .)
-    PLUS            reduce using rule 11 (expr -> TRUE .)
-    LBRACE          reduce using rule 11 (expr -> TRUE .)
-    IF              reduce using rule 11 (expr -> TRUE .)
-    RETURN          reduce using rule 11 (expr -> TRUE .)
-    LET             reduce using rule 11 (expr -> TRUE .)
-    SEMICOLON       reduce using rule 11 (expr -> TRUE .)
-    RPAREN          reduce using rule 11 (expr -> TRUE .)
+    (13) expr -> NUMBER .
+    NE              reduce using rule 13 (expr -> NUMBER .)
+    EQ              reduce using rule 13 (expr -> NUMBER .)
+    GT              reduce using rule 13 (expr -> NUMBER .)
+    LT              reduce using rule 13 (expr -> NUMBER .)
+    DIVIDE          reduce using rule 13 (expr -> NUMBER .)
+    TIMES           reduce using rule 13 (expr -> NUMBER .)
+    MINUS           reduce using rule 13 (expr -> NUMBER .)
+    PLUS            reduce using rule 13 (expr -> NUMBER .)
+    LBRACE          reduce using rule 13 (expr -> NUMBER .)
+    FUNC            reduce using rule 13 (expr -> NUMBER .)
+    IF              reduce using rule 13 (expr -> NUMBER .)
+    RETURN          reduce using rule 13 (expr -> NUMBER .)
+    LET             reduce using rule 13 (expr -> NUMBER .)
+    SEMICOLON       reduce using rule 13 (expr -> NUMBER .)
+    RPAREN          reduce using rule 13 (expr -> NUMBER .)
 
 
 state 15
 
-    (12) expr -> NOT . expr
-    (8) expr -> . ID
-    (9) expr -> . NUMBER
-    (10) expr -> . FALSE
-    (11) expr -> . TRUE
-    (12) expr -> . NOT expr
-    (13) expr -> . MINUS expr
-    (14) expr -> . LPAREN expr RPAREN
-    (15) expr -> . expr NE expr
-    (16) expr -> . expr EQ expr
-    (17) expr -> . expr GT expr
-    (18) expr -> . expr LT expr
-    (19) expr -> . expr DIVIDE expr
-    (20) expr -> . expr TIMES expr
-    (21) expr -> . expr MINUS expr
-    (22) expr -> . expr PLUS expr
-    ID              shift and go to state 11
-    NUMBER          shift and go to state 12
-    FALSE           shift and go to state 13
-    TRUE            shift and go to state 14
-    NOT             shift and go to state 15
-    MINUS           shift and go to state 16
-    LPAREN          shift and go to state 17
+    (14) expr -> FALSE .
+    NE              reduce using rule 14 (expr -> FALSE .)
+    EQ              reduce using rule 14 (expr -> FALSE .)
+    GT              reduce using rule 14 (expr -> FALSE .)
+    LT              reduce using rule 14 (expr -> FALSE .)
+    DIVIDE          reduce using rule 14 (expr -> FALSE .)
+    TIMES           reduce using rule 14 (expr -> FALSE .)
+    MINUS           reduce using rule 14 (expr -> FALSE .)
+    PLUS            reduce using rule 14 (expr -> FALSE .)
+    LBRACE          reduce using rule 14 (expr -> FALSE .)
+    FUNC            reduce using rule 14 (expr -> FALSE .)
+    IF              reduce using rule 14 (expr -> FALSE .)
+    RETURN          reduce using rule 14 (expr -> FALSE .)
+    LET             reduce using rule 14 (expr -> FALSE .)
+    SEMICOLON       reduce using rule 14 (expr -> FALSE .)
+    RPAREN          reduce using rule 14 (expr -> FALSE .)
 
-    expr                           shift and go to state 30
 
 state 16
 
-    (13) expr -> MINUS . expr
-    (8) expr -> . ID
-    (9) expr -> . NUMBER
-    (10) expr -> . FALSE
-    (11) expr -> . TRUE
-    (12) expr -> . NOT expr
-    (13) expr -> . MINUS expr
-    (14) expr -> . LPAREN expr RPAREN
-    (15) expr -> . expr NE expr
-    (16) expr -> . expr EQ expr
-    (17) expr -> . expr GT expr
-    (18) expr -> . expr LT expr
-    (19) expr -> . expr DIVIDE expr
-    (20) expr -> . expr TIMES expr
-    (21) expr -> . expr MINUS expr
-    (22) expr -> . expr PLUS expr
-    ID              shift and go to state 11
-    NUMBER          shift and go to state 12
-    FALSE           shift and go to state 13
-    TRUE            shift and go to state 14
-    NOT             shift and go to state 15
-    MINUS           shift and go to state 16
-    LPAREN          shift and go to state 17
+    (15) expr -> TRUE .
+    NE              reduce using rule 15 (expr -> TRUE .)
+    EQ              reduce using rule 15 (expr -> TRUE .)
+    GT              reduce using rule 15 (expr -> TRUE .)
+    LT              reduce using rule 15 (expr -> TRUE .)
+    DIVIDE          reduce using rule 15 (expr -> TRUE .)
+    TIMES           reduce using rule 15 (expr -> TRUE .)
+    MINUS           reduce using rule 15 (expr -> TRUE .)
+    PLUS            reduce using rule 15 (expr -> TRUE .)
+    LBRACE          reduce using rule 15 (expr -> TRUE .)
+    FUNC            reduce using rule 15 (expr -> TRUE .)
+    IF              reduce using rule 15 (expr -> TRUE .)
+    RETURN          reduce using rule 15 (expr -> TRUE .)
+    LET             reduce using rule 15 (expr -> TRUE .)
+    SEMICOLON       reduce using rule 15 (expr -> TRUE .)
+    RPAREN          reduce using rule 15 (expr -> TRUE .)
 
-    expr                           shift and go to state 31
 
 state 17
 
-    (14) expr -> LPAREN . expr RPAREN
-    (8) expr -> . ID
-    (9) expr -> . NUMBER
-    (10) expr -> . FALSE
-    (11) expr -> . TRUE
-    (12) expr -> . NOT expr
-    (13) expr -> . MINUS expr
-    (14) expr -> . LPAREN expr RPAREN
-    (15) expr -> . expr NE expr
-    (16) expr -> . expr EQ expr
-    (17) expr -> . expr GT expr
-    (18) expr -> . expr LT expr
-    (19) expr -> . expr DIVIDE expr
-    (20) expr -> . expr TIMES expr
-    (21) expr -> . expr MINUS expr
-    (22) expr -> . expr PLUS expr
-    ID              shift and go to state 11
-    NUMBER          shift and go to state 12
-    FALSE           shift and go to state 13
-    TRUE            shift and go to state 14
-    NOT             shift and go to state 15
-    MINUS           shift and go to state 16
-    LPAREN          shift and go to state 17
+    (16) expr -> NOT . expr
+    (12) expr -> . ID
+    (13) expr -> . NUMBER
+    (14) expr -> . FALSE
+    (15) expr -> . TRUE
+    (16) expr -> . NOT expr
+    (17) expr -> . MINUS expr
+    (18) expr -> . LPAREN expr RPAREN
+    (19) expr -> . expr NE expr
+    (20) expr -> . expr EQ expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr DIVIDE expr
+    (24) expr -> . expr TIMES expr
+    (25) expr -> . expr MINUS expr
+    (26) expr -> . expr PLUS expr
+    ID              shift and go to state 13
+    NUMBER          shift and go to state 14
+    FALSE           shift and go to state 15
+    TRUE            shift and go to state 16
+    NOT             shift and go to state 17
+    MINUS           shift and go to state 18
+    LPAREN          shift and go to state 19
 
-    expr                           shift and go to state 32
+    expr                           shift and go to state 35
 
 state 18
 
-    (6) statement -> RETURN expr . SEMICOLON
-    (15) expr -> expr . NE expr
-    (16) expr -> expr . EQ expr
-    (17) expr -> expr . GT expr
-    (18) expr -> expr . LT expr
-    (19) expr -> expr . DIVIDE expr
-    (20) expr -> expr . TIMES expr
-    (21) expr -> expr . MINUS expr
-    (22) expr -> expr . PLUS expr
-    SEMICOLON       shift and go to state 33
-    NE              shift and go to state 22
-    EQ              shift and go to state 23
-    GT              shift and go to state 24
-    LT              shift and go to state 25
-    DIVIDE          shift and go to state 26
-    TIMES           shift and go to state 27
-    MINUS           shift and go to state 28
-    PLUS            shift and go to state 29
+    (17) expr -> MINUS . expr
+    (12) expr -> . ID
+    (13) expr -> . NUMBER
+    (14) expr -> . FALSE
+    (15) expr -> . TRUE
+    (16) expr -> . NOT expr
+    (17) expr -> . MINUS expr
+    (18) expr -> . LPAREN expr RPAREN
+    (19) expr -> . expr NE expr
+    (20) expr -> . expr EQ expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr DIVIDE expr
+    (24) expr -> . expr TIMES expr
+    (25) expr -> . expr MINUS expr
+    (26) expr -> . expr PLUS expr
+    ID              shift and go to state 13
+    NUMBER          shift and go to state 14
+    FALSE           shift and go to state 15
+    TRUE            shift and go to state 16
+    NOT             shift and go to state 17
+    MINUS           shift and go to state 18
+    LPAREN          shift and go to state 19
 
+    expr                           shift and go to state 36
 
 state 19
 
-    (7) statement -> LET ID . ASSIGN expr SEMICOLON
-    ASSIGN          shift and go to state 34
+    (18) expr -> LPAREN . expr RPAREN
+    (12) expr -> . ID
+    (13) expr -> . NUMBER
+    (14) expr -> . FALSE
+    (15) expr -> . TRUE
+    (16) expr -> . NOT expr
+    (17) expr -> . MINUS expr
+    (18) expr -> . LPAREN expr RPAREN
+    (19) expr -> . expr NE expr
+    (20) expr -> . expr EQ expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr DIVIDE expr
+    (24) expr -> . expr TIMES expr
+    (25) expr -> . expr MINUS expr
+    (26) expr -> . expr PLUS expr
+    ID              shift and go to state 13
+    NUMBER          shift and go to state 14
+    FALSE           shift and go to state 15
+    TRUE            shift and go to state 16
+    NOT             shift and go to state 17
+    MINUS           shift and go to state 18
+    LPAREN          shift and go to state 19
 
+    expr                           shift and go to state 37
 
 state 20
 
+    (7) statement -> RETURN expr . SEMICOLON
+    (19) expr -> expr . NE expr
+    (20) expr -> expr . EQ expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . DIVIDE expr
+    (24) expr -> expr . TIMES expr
+    (25) expr -> expr . MINUS expr
+    (26) expr -> expr . PLUS expr
+    SEMICOLON       shift and go to state 38
+    NE              shift and go to state 27
+    EQ              shift and go to state 28
+    GT              shift and go to state 29
+    LT              shift and go to state 30
+    DIVIDE          shift and go to state 31
+    TIMES           shift and go to state 32
+    MINUS           shift and go to state 33
+    PLUS            shift and go to state 34
+
+
+state 21
+
+    (8) statement -> LET ID . ASSIGN expr SEMICOLON
+    ASSIGN          shift and go to state 39
+
+
+state 22
+
     (4) blk_statements -> LBRACE statements RBRACE .
+    FUNC            reduce using rule 4 (blk_statements -> LBRACE statements RBRACE .)
     IF              reduce using rule 4 (blk_statements -> LBRACE statements RBRACE .)
     RETURN          reduce using rule 4 (blk_statements -> LBRACE statements RBRACE .)
     LET             reduce using rule 4 (blk_statements -> LBRACE statements RBRACE .)
@@ -468,667 +507,772 @@ state 20
     ELSE            reduce using rule 4 (blk_statements -> LBRACE statements RBRACE .)
 
 
-state 21
-
-    (5) statement -> IF expr statements . ELSE statements
-    (3) statements -> statements . statement
-    (5) statement -> . IF expr statements ELSE statements
-    (6) statement -> . RETURN expr SEMICOLON
-    (7) statement -> . LET ID ASSIGN expr SEMICOLON
-    ELSE            shift and go to state 35
-    IF              shift and go to state 5
-    RETURN          shift and go to state 6
-    LET             shift and go to state 7
-
-    statement                      shift and go to state 8
-
-state 22
-
-    (15) expr -> expr NE . expr
-    (8) expr -> . ID
-    (9) expr -> . NUMBER
-    (10) expr -> . FALSE
-    (11) expr -> . TRUE
-    (12) expr -> . NOT expr
-    (13) expr -> . MINUS expr
-    (14) expr -> . LPAREN expr RPAREN
-    (15) expr -> . expr NE expr
-    (16) expr -> . expr EQ expr
-    (17) expr -> . expr GT expr
-    (18) expr -> . expr LT expr
-    (19) expr -> . expr DIVIDE expr
-    (20) expr -> . expr TIMES expr
-    (21) expr -> . expr MINUS expr
-    (22) expr -> . expr PLUS expr
-    ID              shift and go to state 11
-    NUMBER          shift and go to state 12
-    FALSE           shift and go to state 13
-    TRUE            shift and go to state 14
-    NOT             shift and go to state 15
-    MINUS           shift and go to state 16
-    LPAREN          shift and go to state 17
-
-    expr                           shift and go to state 36
-
 state 23
 
-    (16) expr -> expr EQ . expr
-    (8) expr -> . ID
-    (9) expr -> . NUMBER
-    (10) expr -> . FALSE
-    (11) expr -> . TRUE
-    (12) expr -> . NOT expr
-    (13) expr -> . MINUS expr
-    (14) expr -> . LPAREN expr RPAREN
-    (15) expr -> . expr NE expr
-    (16) expr -> . expr EQ expr
-    (17) expr -> . expr GT expr
-    (18) expr -> . expr LT expr
-    (19) expr -> . expr DIVIDE expr
-    (20) expr -> . expr TIMES expr
-    (21) expr -> . expr MINUS expr
-    (22) expr -> . expr PLUS expr
-    ID              shift and go to state 11
-    NUMBER          shift and go to state 12
-    FALSE           shift and go to state 13
-    TRUE            shift and go to state 14
-    NOT             shift and go to state 15
-    MINUS           shift and go to state 16
-    LPAREN          shift and go to state 17
+    (5) statement -> FUNC LPAREN params . RPAREN statements
+    (10) params -> params . COMMA param
+    RPAREN          shift and go to state 40
+    COMMA           shift and go to state 41
 
-    expr                           shift and go to state 37
 
 state 24
 
-    (17) expr -> expr GT . expr
-    (8) expr -> . ID
-    (9) expr -> . NUMBER
-    (10) expr -> . FALSE
-    (11) expr -> . TRUE
-    (12) expr -> . NOT expr
-    (13) expr -> . MINUS expr
-    (14) expr -> . LPAREN expr RPAREN
-    (15) expr -> . expr NE expr
-    (16) expr -> . expr EQ expr
-    (17) expr -> . expr GT expr
-    (18) expr -> . expr LT expr
-    (19) expr -> . expr DIVIDE expr
-    (20) expr -> . expr TIMES expr
-    (21) expr -> . expr MINUS expr
-    (22) expr -> . expr PLUS expr
-    ID              shift and go to state 11
-    NUMBER          shift and go to state 12
-    FALSE           shift and go to state 13
-    TRUE            shift and go to state 14
-    NOT             shift and go to state 15
-    MINUS           shift and go to state 16
-    LPAREN          shift and go to state 17
+    (9) params -> param .
+    RPAREN          reduce using rule 9 (params -> param .)
+    COMMA           reduce using rule 9 (params -> param .)
 
-    expr                           shift and go to state 38
 
 state 25
 
-    (18) expr -> expr LT . expr
-    (8) expr -> . ID
-    (9) expr -> . NUMBER
-    (10) expr -> . FALSE
-    (11) expr -> . TRUE
-    (12) expr -> . NOT expr
-    (13) expr -> . MINUS expr
-    (14) expr -> . LPAREN expr RPAREN
-    (15) expr -> . expr NE expr
-    (16) expr -> . expr EQ expr
-    (17) expr -> . expr GT expr
-    (18) expr -> . expr LT expr
-    (19) expr -> . expr DIVIDE expr
-    (20) expr -> . expr TIMES expr
-    (21) expr -> . expr MINUS expr
-    (22) expr -> . expr PLUS expr
-    ID              shift and go to state 11
-    NUMBER          shift and go to state 12
-    FALSE           shift and go to state 13
-    TRUE            shift and go to state 14
-    NOT             shift and go to state 15
-    MINUS           shift and go to state 16
-    LPAREN          shift and go to state 17
+    (11) param -> ID .
+    RPAREN          reduce using rule 11 (param -> ID .)
+    COMMA           reduce using rule 11 (param -> ID .)
 
-    expr                           shift and go to state 39
 
 state 26
 
-    (19) expr -> expr DIVIDE . expr
-    (8) expr -> . ID
-    (9) expr -> . NUMBER
-    (10) expr -> . FALSE
-    (11) expr -> . TRUE
-    (12) expr -> . NOT expr
-    (13) expr -> . MINUS expr
-    (14) expr -> . LPAREN expr RPAREN
-    (15) expr -> . expr NE expr
-    (16) expr -> . expr EQ expr
-    (17) expr -> . expr GT expr
-    (18) expr -> . expr LT expr
-    (19) expr -> . expr DIVIDE expr
-    (20) expr -> . expr TIMES expr
-    (21) expr -> . expr MINUS expr
-    (22) expr -> . expr PLUS expr
-    ID              shift and go to state 11
-    NUMBER          shift and go to state 12
-    FALSE           shift and go to state 13
-    TRUE            shift and go to state 14
-    NOT             shift and go to state 15
-    MINUS           shift and go to state 16
-    LPAREN          shift and go to state 17
+    (6) statement -> IF expr statements . ELSE statements
+    (3) statements -> statements . statement
+    (5) statement -> . FUNC LPAREN params RPAREN statements
+    (6) statement -> . IF expr statements ELSE statements
+    (7) statement -> . RETURN expr SEMICOLON
+    (8) statement -> . LET ID ASSIGN expr SEMICOLON
+    ELSE            shift and go to state 42
+    FUNC            shift and go to state 5
+    IF              shift and go to state 6
+    RETURN          shift and go to state 7
+    LET             shift and go to state 8
 
-    expr                           shift and go to state 40
+    statement                      shift and go to state 9
 
 state 27
 
-    (20) expr -> expr TIMES . expr
-    (8) expr -> . ID
-    (9) expr -> . NUMBER
-    (10) expr -> . FALSE
-    (11) expr -> . TRUE
-    (12) expr -> . NOT expr
-    (13) expr -> . MINUS expr
-    (14) expr -> . LPAREN expr RPAREN
-    (15) expr -> . expr NE expr
-    (16) expr -> . expr EQ expr
-    (17) expr -> . expr GT expr
-    (18) expr -> . expr LT expr
-    (19) expr -> . expr DIVIDE expr
-    (20) expr -> . expr TIMES expr
-    (21) expr -> . expr MINUS expr
-    (22) expr -> . expr PLUS expr
-    ID              shift and go to state 11
-    NUMBER          shift and go to state 12
-    FALSE           shift and go to state 13
-    TRUE            shift and go to state 14
-    NOT             shift and go to state 15
-    MINUS           shift and go to state 16
-    LPAREN          shift and go to state 17
-
-    expr                           shift and go to state 41
-
-state 28
-
-    (21) expr -> expr MINUS . expr
-    (8) expr -> . ID
-    (9) expr -> . NUMBER
-    (10) expr -> . FALSE
-    (11) expr -> . TRUE
-    (12) expr -> . NOT expr
-    (13) expr -> . MINUS expr
-    (14) expr -> . LPAREN expr RPAREN
-    (15) expr -> . expr NE expr
-    (16) expr -> . expr EQ expr
-    (17) expr -> . expr GT expr
-    (18) expr -> . expr LT expr
-    (19) expr -> . expr DIVIDE expr
-    (20) expr -> . expr TIMES expr
-    (21) expr -> . expr MINUS expr
-    (22) expr -> . expr PLUS expr
-    ID              shift and go to state 11
-    NUMBER          shift and go to state 12
-    FALSE           shift and go to state 13
-    TRUE            shift and go to state 14
-    NOT             shift and go to state 15
-    MINUS           shift and go to state 16
-    LPAREN          shift and go to state 17
-
-    expr                           shift and go to state 42
-
-state 29
-
-    (22) expr -> expr PLUS . expr
-    (8) expr -> . ID
-    (9) expr -> . NUMBER
-    (10) expr -> . FALSE
-    (11) expr -> . TRUE
-    (12) expr -> . NOT expr
-    (13) expr -> . MINUS expr
-    (14) expr -> . LPAREN expr RPAREN
-    (15) expr -> . expr NE expr
-    (16) expr -> . expr EQ expr
-    (17) expr -> . expr GT expr
-    (18) expr -> . expr LT expr
-    (19) expr -> . expr DIVIDE expr
-    (20) expr -> . expr TIMES expr
-    (21) expr -> . expr MINUS expr
-    (22) expr -> . expr PLUS expr
-    ID              shift and go to state 11
-    NUMBER          shift and go to state 12
-    FALSE           shift and go to state 13
-    TRUE            shift and go to state 14
-    NOT             shift and go to state 15
-    MINUS           shift and go to state 16
-    LPAREN          shift and go to state 17
+    (19) expr -> expr NE . expr
+    (12) expr -> . ID
+    (13) expr -> . NUMBER
+    (14) expr -> . FALSE
+    (15) expr -> . TRUE
+    (16) expr -> . NOT expr
+    (17) expr -> . MINUS expr
+    (18) expr -> . LPAREN expr RPAREN
+    (19) expr -> . expr NE expr
+    (20) expr -> . expr EQ expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr DIVIDE expr
+    (24) expr -> . expr TIMES expr
+    (25) expr -> . expr MINUS expr
+    (26) expr -> . expr PLUS expr
+    ID              shift and go to state 13
+    NUMBER          shift and go to state 14
+    FALSE           shift and go to state 15
+    TRUE            shift and go to state 16
+    NOT             shift and go to state 17
+    MINUS           shift and go to state 18
+    LPAREN          shift and go to state 19
 
     expr                           shift and go to state 43
 
-state 30
+state 28
 
-    (12) expr -> NOT expr .
-    (15) expr -> expr . NE expr
-    (16) expr -> expr . EQ expr
-    (17) expr -> expr . GT expr
-    (18) expr -> expr . LT expr
-    (19) expr -> expr . DIVIDE expr
-    (20) expr -> expr . TIMES expr
-    (21) expr -> expr . MINUS expr
-    (22) expr -> expr . PLUS expr
-    NE              reduce using rule 12 (expr -> NOT expr .)
-    EQ              reduce using rule 12 (expr -> NOT expr .)
-    GT              reduce using rule 12 (expr -> NOT expr .)
-    LT              reduce using rule 12 (expr -> NOT expr .)
-    DIVIDE          reduce using rule 12 (expr -> NOT expr .)
-    TIMES           reduce using rule 12 (expr -> NOT expr .)
-    MINUS           reduce using rule 12 (expr -> NOT expr .)
-    PLUS            reduce using rule 12 (expr -> NOT expr .)
-    LBRACE          reduce using rule 12 (expr -> NOT expr .)
-    IF              reduce using rule 12 (expr -> NOT expr .)
-    RETURN          reduce using rule 12 (expr -> NOT expr .)
-    LET             reduce using rule 12 (expr -> NOT expr .)
-    SEMICOLON       reduce using rule 12 (expr -> NOT expr .)
-    RPAREN          reduce using rule 12 (expr -> NOT expr .)
+    (20) expr -> expr EQ . expr
+    (12) expr -> . ID
+    (13) expr -> . NUMBER
+    (14) expr -> . FALSE
+    (15) expr -> . TRUE
+    (16) expr -> . NOT expr
+    (17) expr -> . MINUS expr
+    (18) expr -> . LPAREN expr RPAREN
+    (19) expr -> . expr NE expr
+    (20) expr -> . expr EQ expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr DIVIDE expr
+    (24) expr -> . expr TIMES expr
+    (25) expr -> . expr MINUS expr
+    (26) expr -> . expr PLUS expr
+    ID              shift and go to state 13
+    NUMBER          shift and go to state 14
+    FALSE           shift and go to state 15
+    TRUE            shift and go to state 16
+    NOT             shift and go to state 17
+    MINUS           shift and go to state 18
+    LPAREN          shift and go to state 19
 
+    expr                           shift and go to state 44
 
-state 31
+state 29
 
-    (13) expr -> MINUS expr .
-    (15) expr -> expr . NE expr
-    (16) expr -> expr . EQ expr
-    (17) expr -> expr . GT expr
-    (18) expr -> expr . LT expr
-    (19) expr -> expr . DIVIDE expr
-    (20) expr -> expr . TIMES expr
-    (21) expr -> expr . MINUS expr
-    (22) expr -> expr . PLUS expr
-    NE              reduce using rule 13 (expr -> MINUS expr .)
-    EQ              reduce using rule 13 (expr -> MINUS expr .)
-    GT              reduce using rule 13 (expr -> MINUS expr .)
-    LT              reduce using rule 13 (expr -> MINUS expr .)
-    DIVIDE          reduce using rule 13 (expr -> MINUS expr .)
-    TIMES           reduce using rule 13 (expr -> MINUS expr .)
-    MINUS           reduce using rule 13 (expr -> MINUS expr .)
-    PLUS            reduce using rule 13 (expr -> MINUS expr .)
-    LBRACE          reduce using rule 13 (expr -> MINUS expr .)
-    IF              reduce using rule 13 (expr -> MINUS expr .)
-    RETURN          reduce using rule 13 (expr -> MINUS expr .)
-    LET             reduce using rule 13 (expr -> MINUS expr .)
-    SEMICOLON       reduce using rule 13 (expr -> MINUS expr .)
-    RPAREN          reduce using rule 13 (expr -> MINUS expr .)
-
-
-state 32
-
-    (14) expr -> LPAREN expr . RPAREN
-    (15) expr -> expr . NE expr
-    (16) expr -> expr . EQ expr
-    (17) expr -> expr . GT expr
-    (18) expr -> expr . LT expr
-    (19) expr -> expr . DIVIDE expr
-    (20) expr -> expr . TIMES expr
-    (21) expr -> expr . MINUS expr
-    (22) expr -> expr . PLUS expr
-    RPAREN          shift and go to state 44
-    NE              shift and go to state 22
-    EQ              shift and go to state 23
-    GT              shift and go to state 24
-    LT              shift and go to state 25
-    DIVIDE          shift and go to state 26
-    TIMES           shift and go to state 27
-    MINUS           shift and go to state 28
-    PLUS            shift and go to state 29
-
-
-state 33
-
-    (6) statement -> RETURN expr SEMICOLON .
-    IF              reduce using rule 6 (statement -> RETURN expr SEMICOLON .)
-    RETURN          reduce using rule 6 (statement -> RETURN expr SEMICOLON .)
-    LET             reduce using rule 6 (statement -> RETURN expr SEMICOLON .)
-    $end            reduce using rule 6 (statement -> RETURN expr SEMICOLON .)
-    RBRACE          reduce using rule 6 (statement -> RETURN expr SEMICOLON .)
-    ELSE            reduce using rule 6 (statement -> RETURN expr SEMICOLON .)
-
-
-state 34
-
-    (7) statement -> LET ID ASSIGN . expr SEMICOLON
-    (8) expr -> . ID
-    (9) expr -> . NUMBER
-    (10) expr -> . FALSE
-    (11) expr -> . TRUE
-    (12) expr -> . NOT expr
-    (13) expr -> . MINUS expr
-    (14) expr -> . LPAREN expr RPAREN
-    (15) expr -> . expr NE expr
-    (16) expr -> . expr EQ expr
-    (17) expr -> . expr GT expr
-    (18) expr -> . expr LT expr
-    (19) expr -> . expr DIVIDE expr
-    (20) expr -> . expr TIMES expr
-    (21) expr -> . expr MINUS expr
-    (22) expr -> . expr PLUS expr
-    ID              shift and go to state 11
-    NUMBER          shift and go to state 12
-    FALSE           shift and go to state 13
-    TRUE            shift and go to state 14
-    NOT             shift and go to state 15
-    MINUS           shift and go to state 16
-    LPAREN          shift and go to state 17
+    (21) expr -> expr GT . expr
+    (12) expr -> . ID
+    (13) expr -> . NUMBER
+    (14) expr -> . FALSE
+    (15) expr -> . TRUE
+    (16) expr -> . NOT expr
+    (17) expr -> . MINUS expr
+    (18) expr -> . LPAREN expr RPAREN
+    (19) expr -> . expr NE expr
+    (20) expr -> . expr EQ expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr DIVIDE expr
+    (24) expr -> . expr TIMES expr
+    (25) expr -> . expr MINUS expr
+    (26) expr -> . expr PLUS expr
+    ID              shift and go to state 13
+    NUMBER          shift and go to state 14
+    FALSE           shift and go to state 15
+    TRUE            shift and go to state 16
+    NOT             shift and go to state 17
+    MINUS           shift and go to state 18
+    LPAREN          shift and go to state 19
 
     expr                           shift and go to state 45
 
+state 30
+
+    (22) expr -> expr LT . expr
+    (12) expr -> . ID
+    (13) expr -> . NUMBER
+    (14) expr -> . FALSE
+    (15) expr -> . TRUE
+    (16) expr -> . NOT expr
+    (17) expr -> . MINUS expr
+    (18) expr -> . LPAREN expr RPAREN
+    (19) expr -> . expr NE expr
+    (20) expr -> . expr EQ expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr DIVIDE expr
+    (24) expr -> . expr TIMES expr
+    (25) expr -> . expr MINUS expr
+    (26) expr -> . expr PLUS expr
+    ID              shift and go to state 13
+    NUMBER          shift and go to state 14
+    FALSE           shift and go to state 15
+    TRUE            shift and go to state 16
+    NOT             shift and go to state 17
+    MINUS           shift and go to state 18
+    LPAREN          shift and go to state 19
+
+    expr                           shift and go to state 46
+
+state 31
+
+    (23) expr -> expr DIVIDE . expr
+    (12) expr -> . ID
+    (13) expr -> . NUMBER
+    (14) expr -> . FALSE
+    (15) expr -> . TRUE
+    (16) expr -> . NOT expr
+    (17) expr -> . MINUS expr
+    (18) expr -> . LPAREN expr RPAREN
+    (19) expr -> . expr NE expr
+    (20) expr -> . expr EQ expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr DIVIDE expr
+    (24) expr -> . expr TIMES expr
+    (25) expr -> . expr MINUS expr
+    (26) expr -> . expr PLUS expr
+    ID              shift and go to state 13
+    NUMBER          shift and go to state 14
+    FALSE           shift and go to state 15
+    TRUE            shift and go to state 16
+    NOT             shift and go to state 17
+    MINUS           shift and go to state 18
+    LPAREN          shift and go to state 19
+
+    expr                           shift and go to state 47
+
+state 32
+
+    (24) expr -> expr TIMES . expr
+    (12) expr -> . ID
+    (13) expr -> . NUMBER
+    (14) expr -> . FALSE
+    (15) expr -> . TRUE
+    (16) expr -> . NOT expr
+    (17) expr -> . MINUS expr
+    (18) expr -> . LPAREN expr RPAREN
+    (19) expr -> . expr NE expr
+    (20) expr -> . expr EQ expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr DIVIDE expr
+    (24) expr -> . expr TIMES expr
+    (25) expr -> . expr MINUS expr
+    (26) expr -> . expr PLUS expr
+    ID              shift and go to state 13
+    NUMBER          shift and go to state 14
+    FALSE           shift and go to state 15
+    TRUE            shift and go to state 16
+    NOT             shift and go to state 17
+    MINUS           shift and go to state 18
+    LPAREN          shift and go to state 19
+
+    expr                           shift and go to state 48
+
+state 33
+
+    (25) expr -> expr MINUS . expr
+    (12) expr -> . ID
+    (13) expr -> . NUMBER
+    (14) expr -> . FALSE
+    (15) expr -> . TRUE
+    (16) expr -> . NOT expr
+    (17) expr -> . MINUS expr
+    (18) expr -> . LPAREN expr RPAREN
+    (19) expr -> . expr NE expr
+    (20) expr -> . expr EQ expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr DIVIDE expr
+    (24) expr -> . expr TIMES expr
+    (25) expr -> . expr MINUS expr
+    (26) expr -> . expr PLUS expr
+    ID              shift and go to state 13
+    NUMBER          shift and go to state 14
+    FALSE           shift and go to state 15
+    TRUE            shift and go to state 16
+    NOT             shift and go to state 17
+    MINUS           shift and go to state 18
+    LPAREN          shift and go to state 19
+
+    expr                           shift and go to state 49
+
+state 34
+
+    (26) expr -> expr PLUS . expr
+    (12) expr -> . ID
+    (13) expr -> . NUMBER
+    (14) expr -> . FALSE
+    (15) expr -> . TRUE
+    (16) expr -> . NOT expr
+    (17) expr -> . MINUS expr
+    (18) expr -> . LPAREN expr RPAREN
+    (19) expr -> . expr NE expr
+    (20) expr -> . expr EQ expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr DIVIDE expr
+    (24) expr -> . expr TIMES expr
+    (25) expr -> . expr MINUS expr
+    (26) expr -> . expr PLUS expr
+    ID              shift and go to state 13
+    NUMBER          shift and go to state 14
+    FALSE           shift and go to state 15
+    TRUE            shift and go to state 16
+    NOT             shift and go to state 17
+    MINUS           shift and go to state 18
+    LPAREN          shift and go to state 19
+
+    expr                           shift and go to state 50
+
 state 35
 
-    (5) statement -> IF expr statements ELSE . statements
-    (1) statements -> . blk_statements
-    (2) statements -> . statement
-    (3) statements -> . statements statement
-    (4) blk_statements -> . LBRACE statements RBRACE
-    (5) statement -> . IF expr statements ELSE statements
-    (6) statement -> . RETURN expr SEMICOLON
-    (7) statement -> . LET ID ASSIGN expr SEMICOLON
-    LBRACE          shift and go to state 4
-    IF              shift and go to state 5
-    RETURN          shift and go to state 6
-    LET             shift and go to state 7
+    (16) expr -> NOT expr .
+    (19) expr -> expr . NE expr
+    (20) expr -> expr . EQ expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . DIVIDE expr
+    (24) expr -> expr . TIMES expr
+    (25) expr -> expr . MINUS expr
+    (26) expr -> expr . PLUS expr
+    NE              reduce using rule 16 (expr -> NOT expr .)
+    EQ              reduce using rule 16 (expr -> NOT expr .)
+    GT              reduce using rule 16 (expr -> NOT expr .)
+    LT              reduce using rule 16 (expr -> NOT expr .)
+    DIVIDE          reduce using rule 16 (expr -> NOT expr .)
+    TIMES           reduce using rule 16 (expr -> NOT expr .)
+    MINUS           reduce using rule 16 (expr -> NOT expr .)
+    PLUS            reduce using rule 16 (expr -> NOT expr .)
+    LBRACE          reduce using rule 16 (expr -> NOT expr .)
+    FUNC            reduce using rule 16 (expr -> NOT expr .)
+    IF              reduce using rule 16 (expr -> NOT expr .)
+    RETURN          reduce using rule 16 (expr -> NOT expr .)
+    LET             reduce using rule 16 (expr -> NOT expr .)
+    SEMICOLON       reduce using rule 16 (expr -> NOT expr .)
+    RPAREN          reduce using rule 16 (expr -> NOT expr .)
 
-    statements                     shift and go to state 46
-    blk_statements                 shift and go to state 2
-    statement                      shift and go to state 3
 
 state 36
 
-    (15) expr -> expr NE expr .
-    (15) expr -> expr . NE expr
-    (16) expr -> expr . EQ expr
-    (17) expr -> expr . GT expr
-    (18) expr -> expr . LT expr
-    (19) expr -> expr . DIVIDE expr
-    (20) expr -> expr . TIMES expr
-    (21) expr -> expr . MINUS expr
-    (22) expr -> expr . PLUS expr
-    NE              reduce using rule 15 (expr -> expr NE expr .)
-    EQ              reduce using rule 15 (expr -> expr NE expr .)
-    LBRACE          reduce using rule 15 (expr -> expr NE expr .)
-    IF              reduce using rule 15 (expr -> expr NE expr .)
-    RETURN          reduce using rule 15 (expr -> expr NE expr .)
-    LET             reduce using rule 15 (expr -> expr NE expr .)
-    SEMICOLON       reduce using rule 15 (expr -> expr NE expr .)
-    RPAREN          reduce using rule 15 (expr -> expr NE expr .)
-    GT              shift and go to state 24
-    LT              shift and go to state 25
-    DIVIDE          shift and go to state 26
-    TIMES           shift and go to state 27
-    MINUS           shift and go to state 28
-    PLUS            shift and go to state 29
+    (17) expr -> MINUS expr .
+    (19) expr -> expr . NE expr
+    (20) expr -> expr . EQ expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . DIVIDE expr
+    (24) expr -> expr . TIMES expr
+    (25) expr -> expr . MINUS expr
+    (26) expr -> expr . PLUS expr
+    NE              reduce using rule 17 (expr -> MINUS expr .)
+    EQ              reduce using rule 17 (expr -> MINUS expr .)
+    GT              reduce using rule 17 (expr -> MINUS expr .)
+    LT              reduce using rule 17 (expr -> MINUS expr .)
+    DIVIDE          reduce using rule 17 (expr -> MINUS expr .)
+    TIMES           reduce using rule 17 (expr -> MINUS expr .)
+    MINUS           reduce using rule 17 (expr -> MINUS expr .)
+    PLUS            reduce using rule 17 (expr -> MINUS expr .)
+    LBRACE          reduce using rule 17 (expr -> MINUS expr .)
+    FUNC            reduce using rule 17 (expr -> MINUS expr .)
+    IF              reduce using rule 17 (expr -> MINUS expr .)
+    RETURN          reduce using rule 17 (expr -> MINUS expr .)
+    LET             reduce using rule 17 (expr -> MINUS expr .)
+    SEMICOLON       reduce using rule 17 (expr -> MINUS expr .)
+    RPAREN          reduce using rule 17 (expr -> MINUS expr .)
 
 
 state 37
 
-    (16) expr -> expr EQ expr .
-    (15) expr -> expr . NE expr
-    (16) expr -> expr . EQ expr
-    (17) expr -> expr . GT expr
-    (18) expr -> expr . LT expr
-    (19) expr -> expr . DIVIDE expr
-    (20) expr -> expr . TIMES expr
-    (21) expr -> expr . MINUS expr
-    (22) expr -> expr . PLUS expr
-    NE              reduce using rule 16 (expr -> expr EQ expr .)
-    EQ              reduce using rule 16 (expr -> expr EQ expr .)
-    LBRACE          reduce using rule 16 (expr -> expr EQ expr .)
-    IF              reduce using rule 16 (expr -> expr EQ expr .)
-    RETURN          reduce using rule 16 (expr -> expr EQ expr .)
-    LET             reduce using rule 16 (expr -> expr EQ expr .)
-    SEMICOLON       reduce using rule 16 (expr -> expr EQ expr .)
-    RPAREN          reduce using rule 16 (expr -> expr EQ expr .)
-    GT              shift and go to state 24
-    LT              shift and go to state 25
-    DIVIDE          shift and go to state 26
-    TIMES           shift and go to state 27
-    MINUS           shift and go to state 28
-    PLUS            shift and go to state 29
+    (18) expr -> LPAREN expr . RPAREN
+    (19) expr -> expr . NE expr
+    (20) expr -> expr . EQ expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . DIVIDE expr
+    (24) expr -> expr . TIMES expr
+    (25) expr -> expr . MINUS expr
+    (26) expr -> expr . PLUS expr
+    RPAREN          shift and go to state 51
+    NE              shift and go to state 27
+    EQ              shift and go to state 28
+    GT              shift and go to state 29
+    LT              shift and go to state 30
+    DIVIDE          shift and go to state 31
+    TIMES           shift and go to state 32
+    MINUS           shift and go to state 33
+    PLUS            shift and go to state 34
 
 
 state 38
 
-    (17) expr -> expr GT expr .
-    (15) expr -> expr . NE expr
-    (16) expr -> expr . EQ expr
-    (17) expr -> expr . GT expr
-    (18) expr -> expr . LT expr
-    (19) expr -> expr . DIVIDE expr
-    (20) expr -> expr . TIMES expr
-    (21) expr -> expr . MINUS expr
-    (22) expr -> expr . PLUS expr
-    NE              reduce using rule 17 (expr -> expr GT expr .)
-    EQ              reduce using rule 17 (expr -> expr GT expr .)
-    GT              reduce using rule 17 (expr -> expr GT expr .)
-    LT              reduce using rule 17 (expr -> expr GT expr .)
-    LBRACE          reduce using rule 17 (expr -> expr GT expr .)
-    IF              reduce using rule 17 (expr -> expr GT expr .)
-    RETURN          reduce using rule 17 (expr -> expr GT expr .)
-    LET             reduce using rule 17 (expr -> expr GT expr .)
-    SEMICOLON       reduce using rule 17 (expr -> expr GT expr .)
-    RPAREN          reduce using rule 17 (expr -> expr GT expr .)
-    DIVIDE          shift and go to state 26
-    TIMES           shift and go to state 27
-    MINUS           shift and go to state 28
-    PLUS            shift and go to state 29
+    (7) statement -> RETURN expr SEMICOLON .
+    FUNC            reduce using rule 7 (statement -> RETURN expr SEMICOLON .)
+    IF              reduce using rule 7 (statement -> RETURN expr SEMICOLON .)
+    RETURN          reduce using rule 7 (statement -> RETURN expr SEMICOLON .)
+    LET             reduce using rule 7 (statement -> RETURN expr SEMICOLON .)
+    $end            reduce using rule 7 (statement -> RETURN expr SEMICOLON .)
+    RBRACE          reduce using rule 7 (statement -> RETURN expr SEMICOLON .)
+    ELSE            reduce using rule 7 (statement -> RETURN expr SEMICOLON .)
 
 
 state 39
 
-    (18) expr -> expr LT expr .
-    (15) expr -> expr . NE expr
-    (16) expr -> expr . EQ expr
-    (17) expr -> expr . GT expr
-    (18) expr -> expr . LT expr
-    (19) expr -> expr . DIVIDE expr
-    (20) expr -> expr . TIMES expr
-    (21) expr -> expr . MINUS expr
-    (22) expr -> expr . PLUS expr
-    NE              reduce using rule 18 (expr -> expr LT expr .)
-    EQ              reduce using rule 18 (expr -> expr LT expr .)
-    GT              reduce using rule 18 (expr -> expr LT expr .)
-    LT              reduce using rule 18 (expr -> expr LT expr .)
-    LBRACE          reduce using rule 18 (expr -> expr LT expr .)
-    IF              reduce using rule 18 (expr -> expr LT expr .)
-    RETURN          reduce using rule 18 (expr -> expr LT expr .)
-    LET             reduce using rule 18 (expr -> expr LT expr .)
-    SEMICOLON       reduce using rule 18 (expr -> expr LT expr .)
-    RPAREN          reduce using rule 18 (expr -> expr LT expr .)
-    DIVIDE          shift and go to state 26
-    TIMES           shift and go to state 27
-    MINUS           shift and go to state 28
-    PLUS            shift and go to state 29
+    (8) statement -> LET ID ASSIGN . expr SEMICOLON
+    (12) expr -> . ID
+    (13) expr -> . NUMBER
+    (14) expr -> . FALSE
+    (15) expr -> . TRUE
+    (16) expr -> . NOT expr
+    (17) expr -> . MINUS expr
+    (18) expr -> . LPAREN expr RPAREN
+    (19) expr -> . expr NE expr
+    (20) expr -> . expr EQ expr
+    (21) expr -> . expr GT expr
+    (22) expr -> . expr LT expr
+    (23) expr -> . expr DIVIDE expr
+    (24) expr -> . expr TIMES expr
+    (25) expr -> . expr MINUS expr
+    (26) expr -> . expr PLUS expr
+    ID              shift and go to state 13
+    NUMBER          shift and go to state 14
+    FALSE           shift and go to state 15
+    TRUE            shift and go to state 16
+    NOT             shift and go to state 17
+    MINUS           shift and go to state 18
+    LPAREN          shift and go to state 19
 
+    expr                           shift and go to state 52
 
 state 40
 
-    (19) expr -> expr DIVIDE expr .
-    (15) expr -> expr . NE expr
-    (16) expr -> expr . EQ expr
-    (17) expr -> expr . GT expr
-    (18) expr -> expr . LT expr
-    (19) expr -> expr . DIVIDE expr
-    (20) expr -> expr . TIMES expr
-    (21) expr -> expr . MINUS expr
-    (22) expr -> expr . PLUS expr
-    NE              reduce using rule 19 (expr -> expr DIVIDE expr .)
-    EQ              reduce using rule 19 (expr -> expr DIVIDE expr .)
-    GT              reduce using rule 19 (expr -> expr DIVIDE expr .)
-    LT              reduce using rule 19 (expr -> expr DIVIDE expr .)
-    DIVIDE          reduce using rule 19 (expr -> expr DIVIDE expr .)
-    TIMES           reduce using rule 19 (expr -> expr DIVIDE expr .)
-    MINUS           reduce using rule 19 (expr -> expr DIVIDE expr .)
-    PLUS            reduce using rule 19 (expr -> expr DIVIDE expr .)
-    LBRACE          reduce using rule 19 (expr -> expr DIVIDE expr .)
-    IF              reduce using rule 19 (expr -> expr DIVIDE expr .)
-    RETURN          reduce using rule 19 (expr -> expr DIVIDE expr .)
-    LET             reduce using rule 19 (expr -> expr DIVIDE expr .)
-    SEMICOLON       reduce using rule 19 (expr -> expr DIVIDE expr .)
-    RPAREN          reduce using rule 19 (expr -> expr DIVIDE expr .)
+    (5) statement -> FUNC LPAREN params RPAREN . statements
+    (1) statements -> . blk_statements
+    (2) statements -> . statement
+    (3) statements -> . statements statement
+    (4) blk_statements -> . LBRACE statements RBRACE
+    (5) statement -> . FUNC LPAREN params RPAREN statements
+    (6) statement -> . IF expr statements ELSE statements
+    (7) statement -> . RETURN expr SEMICOLON
+    (8) statement -> . LET ID ASSIGN expr SEMICOLON
+    LBRACE          shift and go to state 4
+    FUNC            shift and go to state 5
+    IF              shift and go to state 6
+    RETURN          shift and go to state 7
+    LET             shift and go to state 8
 
+    statements                     shift and go to state 53
+    blk_statements                 shift and go to state 2
+    statement                      shift and go to state 3
 
 state 41
 
-    (20) expr -> expr TIMES expr .
-    (15) expr -> expr . NE expr
-    (16) expr -> expr . EQ expr
-    (17) expr -> expr . GT expr
-    (18) expr -> expr . LT expr
-    (19) expr -> expr . DIVIDE expr
-    (20) expr -> expr . TIMES expr
-    (21) expr -> expr . MINUS expr
-    (22) expr -> expr . PLUS expr
-    NE              reduce using rule 20 (expr -> expr TIMES expr .)
-    EQ              reduce using rule 20 (expr -> expr TIMES expr .)
-    GT              reduce using rule 20 (expr -> expr TIMES expr .)
-    LT              reduce using rule 20 (expr -> expr TIMES expr .)
-    DIVIDE          reduce using rule 20 (expr -> expr TIMES expr .)
-    TIMES           reduce using rule 20 (expr -> expr TIMES expr .)
-    MINUS           reduce using rule 20 (expr -> expr TIMES expr .)
-    PLUS            reduce using rule 20 (expr -> expr TIMES expr .)
-    LBRACE          reduce using rule 20 (expr -> expr TIMES expr .)
-    IF              reduce using rule 20 (expr -> expr TIMES expr .)
-    RETURN          reduce using rule 20 (expr -> expr TIMES expr .)
-    LET             reduce using rule 20 (expr -> expr TIMES expr .)
-    SEMICOLON       reduce using rule 20 (expr -> expr TIMES expr .)
-    RPAREN          reduce using rule 20 (expr -> expr TIMES expr .)
+    (10) params -> params COMMA . param
+    (11) param -> . ID
+    ID              shift and go to state 25
 
+    param                          shift and go to state 54
 
 state 42
 
-    (21) expr -> expr MINUS expr .
-    (15) expr -> expr . NE expr
-    (16) expr -> expr . EQ expr
-    (17) expr -> expr . GT expr
-    (18) expr -> expr . LT expr
-    (19) expr -> expr . DIVIDE expr
-    (20) expr -> expr . TIMES expr
-    (21) expr -> expr . MINUS expr
-    (22) expr -> expr . PLUS expr
-    NE              reduce using rule 21 (expr -> expr MINUS expr .)
-    EQ              reduce using rule 21 (expr -> expr MINUS expr .)
-    GT              reduce using rule 21 (expr -> expr MINUS expr .)
-    LT              reduce using rule 21 (expr -> expr MINUS expr .)
-    MINUS           reduce using rule 21 (expr -> expr MINUS expr .)
-    PLUS            reduce using rule 21 (expr -> expr MINUS expr .)
-    LBRACE          reduce using rule 21 (expr -> expr MINUS expr .)
-    IF              reduce using rule 21 (expr -> expr MINUS expr .)
-    RETURN          reduce using rule 21 (expr -> expr MINUS expr .)
-    LET             reduce using rule 21 (expr -> expr MINUS expr .)
-    SEMICOLON       reduce using rule 21 (expr -> expr MINUS expr .)
-    RPAREN          reduce using rule 21 (expr -> expr MINUS expr .)
-    DIVIDE          shift and go to state 26
-    TIMES           shift and go to state 27
+    (6) statement -> IF expr statements ELSE . statements
+    (1) statements -> . blk_statements
+    (2) statements -> . statement
+    (3) statements -> . statements statement
+    (4) blk_statements -> . LBRACE statements RBRACE
+    (5) statement -> . FUNC LPAREN params RPAREN statements
+    (6) statement -> . IF expr statements ELSE statements
+    (7) statement -> . RETURN expr SEMICOLON
+    (8) statement -> . LET ID ASSIGN expr SEMICOLON
+    LBRACE          shift and go to state 4
+    FUNC            shift and go to state 5
+    IF              shift and go to state 6
+    RETURN          shift and go to state 7
+    LET             shift and go to state 8
 
+    statements                     shift and go to state 55
+    blk_statements                 shift and go to state 2
+    statement                      shift and go to state 3
 
 state 43
 
-    (22) expr -> expr PLUS expr .
-    (15) expr -> expr . NE expr
-    (16) expr -> expr . EQ expr
-    (17) expr -> expr . GT expr
-    (18) expr -> expr . LT expr
-    (19) expr -> expr . DIVIDE expr
-    (20) expr -> expr . TIMES expr
-    (21) expr -> expr . MINUS expr
-    (22) expr -> expr . PLUS expr
-    NE              reduce using rule 22 (expr -> expr PLUS expr .)
-    EQ              reduce using rule 22 (expr -> expr PLUS expr .)
-    GT              reduce using rule 22 (expr -> expr PLUS expr .)
-    LT              reduce using rule 22 (expr -> expr PLUS expr .)
-    MINUS           reduce using rule 22 (expr -> expr PLUS expr .)
-    PLUS            reduce using rule 22 (expr -> expr PLUS expr .)
-    LBRACE          reduce using rule 22 (expr -> expr PLUS expr .)
-    IF              reduce using rule 22 (expr -> expr PLUS expr .)
-    RETURN          reduce using rule 22 (expr -> expr PLUS expr .)
-    LET             reduce using rule 22 (expr -> expr PLUS expr .)
-    SEMICOLON       reduce using rule 22 (expr -> expr PLUS expr .)
-    RPAREN          reduce using rule 22 (expr -> expr PLUS expr .)
-    DIVIDE          shift and go to state 26
-    TIMES           shift and go to state 27
+    (19) expr -> expr NE expr .
+    (19) expr -> expr . NE expr
+    (20) expr -> expr . EQ expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . DIVIDE expr
+    (24) expr -> expr . TIMES expr
+    (25) expr -> expr . MINUS expr
+    (26) expr -> expr . PLUS expr
+    NE              reduce using rule 19 (expr -> expr NE expr .)
+    EQ              reduce using rule 19 (expr -> expr NE expr .)
+    LBRACE          reduce using rule 19 (expr -> expr NE expr .)
+    FUNC            reduce using rule 19 (expr -> expr NE expr .)
+    IF              reduce using rule 19 (expr -> expr NE expr .)
+    RETURN          reduce using rule 19 (expr -> expr NE expr .)
+    LET             reduce using rule 19 (expr -> expr NE expr .)
+    SEMICOLON       reduce using rule 19 (expr -> expr NE expr .)
+    RPAREN          reduce using rule 19 (expr -> expr NE expr .)
+    GT              shift and go to state 29
+    LT              shift and go to state 30
+    DIVIDE          shift and go to state 31
+    TIMES           shift and go to state 32
+    MINUS           shift and go to state 33
+    PLUS            shift and go to state 34
 
 
 state 44
 
-    (14) expr -> LPAREN expr RPAREN .
-    NE              reduce using rule 14 (expr -> LPAREN expr RPAREN .)
-    EQ              reduce using rule 14 (expr -> LPAREN expr RPAREN .)
-    GT              reduce using rule 14 (expr -> LPAREN expr RPAREN .)
-    LT              reduce using rule 14 (expr -> LPAREN expr RPAREN .)
-    DIVIDE          reduce using rule 14 (expr -> LPAREN expr RPAREN .)
-    TIMES           reduce using rule 14 (expr -> LPAREN expr RPAREN .)
-    MINUS           reduce using rule 14 (expr -> LPAREN expr RPAREN .)
-    PLUS            reduce using rule 14 (expr -> LPAREN expr RPAREN .)
-    LBRACE          reduce using rule 14 (expr -> LPAREN expr RPAREN .)
-    IF              reduce using rule 14 (expr -> LPAREN expr RPAREN .)
-    RETURN          reduce using rule 14 (expr -> LPAREN expr RPAREN .)
-    LET             reduce using rule 14 (expr -> LPAREN expr RPAREN .)
-    SEMICOLON       reduce using rule 14 (expr -> LPAREN expr RPAREN .)
-    RPAREN          reduce using rule 14 (expr -> LPAREN expr RPAREN .)
+    (20) expr -> expr EQ expr .
+    (19) expr -> expr . NE expr
+    (20) expr -> expr . EQ expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . DIVIDE expr
+    (24) expr -> expr . TIMES expr
+    (25) expr -> expr . MINUS expr
+    (26) expr -> expr . PLUS expr
+    NE              reduce using rule 20 (expr -> expr EQ expr .)
+    EQ              reduce using rule 20 (expr -> expr EQ expr .)
+    LBRACE          reduce using rule 20 (expr -> expr EQ expr .)
+    FUNC            reduce using rule 20 (expr -> expr EQ expr .)
+    IF              reduce using rule 20 (expr -> expr EQ expr .)
+    RETURN          reduce using rule 20 (expr -> expr EQ expr .)
+    LET             reduce using rule 20 (expr -> expr EQ expr .)
+    SEMICOLON       reduce using rule 20 (expr -> expr EQ expr .)
+    RPAREN          reduce using rule 20 (expr -> expr EQ expr .)
+    GT              shift and go to state 29
+    LT              shift and go to state 30
+    DIVIDE          shift and go to state 31
+    TIMES           shift and go to state 32
+    MINUS           shift and go to state 33
+    PLUS            shift and go to state 34
 
 
 state 45
 
-    (7) statement -> LET ID ASSIGN expr . SEMICOLON
-    (15) expr -> expr . NE expr
-    (16) expr -> expr . EQ expr
-    (17) expr -> expr . GT expr
-    (18) expr -> expr . LT expr
-    (19) expr -> expr . DIVIDE expr
-    (20) expr -> expr . TIMES expr
-    (21) expr -> expr . MINUS expr
-    (22) expr -> expr . PLUS expr
-    SEMICOLON       shift and go to state 47
-    NE              shift and go to state 22
-    EQ              shift and go to state 23
-    GT              shift and go to state 24
-    LT              shift and go to state 25
-    DIVIDE          shift and go to state 26
-    TIMES           shift and go to state 27
-    MINUS           shift and go to state 28
-    PLUS            shift and go to state 29
+    (21) expr -> expr GT expr .
+    (19) expr -> expr . NE expr
+    (20) expr -> expr . EQ expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . DIVIDE expr
+    (24) expr -> expr . TIMES expr
+    (25) expr -> expr . MINUS expr
+    (26) expr -> expr . PLUS expr
+    NE              reduce using rule 21 (expr -> expr GT expr .)
+    EQ              reduce using rule 21 (expr -> expr GT expr .)
+    GT              reduce using rule 21 (expr -> expr GT expr .)
+    LT              reduce using rule 21 (expr -> expr GT expr .)
+    LBRACE          reduce using rule 21 (expr -> expr GT expr .)
+    FUNC            reduce using rule 21 (expr -> expr GT expr .)
+    IF              reduce using rule 21 (expr -> expr GT expr .)
+    RETURN          reduce using rule 21 (expr -> expr GT expr .)
+    LET             reduce using rule 21 (expr -> expr GT expr .)
+    SEMICOLON       reduce using rule 21 (expr -> expr GT expr .)
+    RPAREN          reduce using rule 21 (expr -> expr GT expr .)
+    DIVIDE          shift and go to state 31
+    TIMES           shift and go to state 32
+    MINUS           shift and go to state 33
+    PLUS            shift and go to state 34
 
 
 state 46
 
-    (5) statement -> IF expr statements ELSE statements .
-    (3) statements -> statements . statement
-    (5) statement -> . IF expr statements ELSE statements
-    (6) statement -> . RETURN expr SEMICOLON
-    (7) statement -> . LET ID ASSIGN expr SEMICOLON
-  ! shift/reduce conflict for IF resolved as shift
-  ! shift/reduce conflict for RETURN resolved as shift
-  ! shift/reduce conflict for LET resolved as shift
-    $end            reduce using rule 5 (statement -> IF expr statements ELSE statements .)
-    RBRACE          reduce using rule 5 (statement -> IF expr statements ELSE statements .)
-    ELSE            reduce using rule 5 (statement -> IF expr statements ELSE statements .)
-    IF              shift and go to state 5
-    RETURN          shift and go to state 6
-    LET             shift and go to state 7
+    (22) expr -> expr LT expr .
+    (19) expr -> expr . NE expr
+    (20) expr -> expr . EQ expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . DIVIDE expr
+    (24) expr -> expr . TIMES expr
+    (25) expr -> expr . MINUS expr
+    (26) expr -> expr . PLUS expr
+    NE              reduce using rule 22 (expr -> expr LT expr .)
+    EQ              reduce using rule 22 (expr -> expr LT expr .)
+    GT              reduce using rule 22 (expr -> expr LT expr .)
+    LT              reduce using rule 22 (expr -> expr LT expr .)
+    LBRACE          reduce using rule 22 (expr -> expr LT expr .)
+    FUNC            reduce using rule 22 (expr -> expr LT expr .)
+    IF              reduce using rule 22 (expr -> expr LT expr .)
+    RETURN          reduce using rule 22 (expr -> expr LT expr .)
+    LET             reduce using rule 22 (expr -> expr LT expr .)
+    SEMICOLON       reduce using rule 22 (expr -> expr LT expr .)
+    RPAREN          reduce using rule 22 (expr -> expr LT expr .)
+    DIVIDE          shift and go to state 31
+    TIMES           shift and go to state 32
+    MINUS           shift and go to state 33
+    PLUS            shift and go to state 34
 
-    statement                      shift and go to state 8
 
 state 47
 
-    (7) statement -> LET ID ASSIGN expr SEMICOLON .
-    IF              reduce using rule 7 (statement -> LET ID ASSIGN expr SEMICOLON .)
-    RETURN          reduce using rule 7 (statement -> LET ID ASSIGN expr SEMICOLON .)
-    LET             reduce using rule 7 (statement -> LET ID ASSIGN expr SEMICOLON .)
-    $end            reduce using rule 7 (statement -> LET ID ASSIGN expr SEMICOLON .)
-    RBRACE          reduce using rule 7 (statement -> LET ID ASSIGN expr SEMICOLON .)
-    ELSE            reduce using rule 7 (statement -> LET ID ASSIGN expr SEMICOLON .)
+    (23) expr -> expr DIVIDE expr .
+    (19) expr -> expr . NE expr
+    (20) expr -> expr . EQ expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . DIVIDE expr
+    (24) expr -> expr . TIMES expr
+    (25) expr -> expr . MINUS expr
+    (26) expr -> expr . PLUS expr
+    NE              reduce using rule 23 (expr -> expr DIVIDE expr .)
+    EQ              reduce using rule 23 (expr -> expr DIVIDE expr .)
+    GT              reduce using rule 23 (expr -> expr DIVIDE expr .)
+    LT              reduce using rule 23 (expr -> expr DIVIDE expr .)
+    DIVIDE          reduce using rule 23 (expr -> expr DIVIDE expr .)
+    TIMES           reduce using rule 23 (expr -> expr DIVIDE expr .)
+    MINUS           reduce using rule 23 (expr -> expr DIVIDE expr .)
+    PLUS            reduce using rule 23 (expr -> expr DIVIDE expr .)
+    LBRACE          reduce using rule 23 (expr -> expr DIVIDE expr .)
+    FUNC            reduce using rule 23 (expr -> expr DIVIDE expr .)
+    IF              reduce using rule 23 (expr -> expr DIVIDE expr .)
+    RETURN          reduce using rule 23 (expr -> expr DIVIDE expr .)
+    LET             reduce using rule 23 (expr -> expr DIVIDE expr .)
+    SEMICOLON       reduce using rule 23 (expr -> expr DIVIDE expr .)
+    RPAREN          reduce using rule 23 (expr -> expr DIVIDE expr .)
+
+
+state 48
+
+    (24) expr -> expr TIMES expr .
+    (19) expr -> expr . NE expr
+    (20) expr -> expr . EQ expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . DIVIDE expr
+    (24) expr -> expr . TIMES expr
+    (25) expr -> expr . MINUS expr
+    (26) expr -> expr . PLUS expr
+    NE              reduce using rule 24 (expr -> expr TIMES expr .)
+    EQ              reduce using rule 24 (expr -> expr TIMES expr .)
+    GT              reduce using rule 24 (expr -> expr TIMES expr .)
+    LT              reduce using rule 24 (expr -> expr TIMES expr .)
+    DIVIDE          reduce using rule 24 (expr -> expr TIMES expr .)
+    TIMES           reduce using rule 24 (expr -> expr TIMES expr .)
+    MINUS           reduce using rule 24 (expr -> expr TIMES expr .)
+    PLUS            reduce using rule 24 (expr -> expr TIMES expr .)
+    LBRACE          reduce using rule 24 (expr -> expr TIMES expr .)
+    FUNC            reduce using rule 24 (expr -> expr TIMES expr .)
+    IF              reduce using rule 24 (expr -> expr TIMES expr .)
+    RETURN          reduce using rule 24 (expr -> expr TIMES expr .)
+    LET             reduce using rule 24 (expr -> expr TIMES expr .)
+    SEMICOLON       reduce using rule 24 (expr -> expr TIMES expr .)
+    RPAREN          reduce using rule 24 (expr -> expr TIMES expr .)
+
+
+state 49
+
+    (25) expr -> expr MINUS expr .
+    (19) expr -> expr . NE expr
+    (20) expr -> expr . EQ expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . DIVIDE expr
+    (24) expr -> expr . TIMES expr
+    (25) expr -> expr . MINUS expr
+    (26) expr -> expr . PLUS expr
+    NE              reduce using rule 25 (expr -> expr MINUS expr .)
+    EQ              reduce using rule 25 (expr -> expr MINUS expr .)
+    GT              reduce using rule 25 (expr -> expr MINUS expr .)
+    LT              reduce using rule 25 (expr -> expr MINUS expr .)
+    MINUS           reduce using rule 25 (expr -> expr MINUS expr .)
+    PLUS            reduce using rule 25 (expr -> expr MINUS expr .)
+    LBRACE          reduce using rule 25 (expr -> expr MINUS expr .)
+    FUNC            reduce using rule 25 (expr -> expr MINUS expr .)
+    IF              reduce using rule 25 (expr -> expr MINUS expr .)
+    RETURN          reduce using rule 25 (expr -> expr MINUS expr .)
+    LET             reduce using rule 25 (expr -> expr MINUS expr .)
+    SEMICOLON       reduce using rule 25 (expr -> expr MINUS expr .)
+    RPAREN          reduce using rule 25 (expr -> expr MINUS expr .)
+    DIVIDE          shift and go to state 31
+    TIMES           shift and go to state 32
+
+
+state 50
+
+    (26) expr -> expr PLUS expr .
+    (19) expr -> expr . NE expr
+    (20) expr -> expr . EQ expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . DIVIDE expr
+    (24) expr -> expr . TIMES expr
+    (25) expr -> expr . MINUS expr
+    (26) expr -> expr . PLUS expr
+    NE              reduce using rule 26 (expr -> expr PLUS expr .)
+    EQ              reduce using rule 26 (expr -> expr PLUS expr .)
+    GT              reduce using rule 26 (expr -> expr PLUS expr .)
+    LT              reduce using rule 26 (expr -> expr PLUS expr .)
+    MINUS           reduce using rule 26 (expr -> expr PLUS expr .)
+    PLUS            reduce using rule 26 (expr -> expr PLUS expr .)
+    LBRACE          reduce using rule 26 (expr -> expr PLUS expr .)
+    FUNC            reduce using rule 26 (expr -> expr PLUS expr .)
+    IF              reduce using rule 26 (expr -> expr PLUS expr .)
+    RETURN          reduce using rule 26 (expr -> expr PLUS expr .)
+    LET             reduce using rule 26 (expr -> expr PLUS expr .)
+    SEMICOLON       reduce using rule 26 (expr -> expr PLUS expr .)
+    RPAREN          reduce using rule 26 (expr -> expr PLUS expr .)
+    DIVIDE          shift and go to state 31
+    TIMES           shift and go to state 32
+
+
+state 51
+
+    (18) expr -> LPAREN expr RPAREN .
+    NE              reduce using rule 18 (expr -> LPAREN expr RPAREN .)
+    EQ              reduce using rule 18 (expr -> LPAREN expr RPAREN .)
+    GT              reduce using rule 18 (expr -> LPAREN expr RPAREN .)
+    LT              reduce using rule 18 (expr -> LPAREN expr RPAREN .)
+    DIVIDE          reduce using rule 18 (expr -> LPAREN expr RPAREN .)
+    TIMES           reduce using rule 18 (expr -> LPAREN expr RPAREN .)
+    MINUS           reduce using rule 18 (expr -> LPAREN expr RPAREN .)
+    PLUS            reduce using rule 18 (expr -> LPAREN expr RPAREN .)
+    LBRACE          reduce using rule 18 (expr -> LPAREN expr RPAREN .)
+    FUNC            reduce using rule 18 (expr -> LPAREN expr RPAREN .)
+    IF              reduce using rule 18 (expr -> LPAREN expr RPAREN .)
+    RETURN          reduce using rule 18 (expr -> LPAREN expr RPAREN .)
+    LET             reduce using rule 18 (expr -> LPAREN expr RPAREN .)
+    SEMICOLON       reduce using rule 18 (expr -> LPAREN expr RPAREN .)
+    RPAREN          reduce using rule 18 (expr -> LPAREN expr RPAREN .)
+
+
+state 52
+
+    (8) statement -> LET ID ASSIGN expr . SEMICOLON
+    (19) expr -> expr . NE expr
+    (20) expr -> expr . EQ expr
+    (21) expr -> expr . GT expr
+    (22) expr -> expr . LT expr
+    (23) expr -> expr . DIVIDE expr
+    (24) expr -> expr . TIMES expr
+    (25) expr -> expr . MINUS expr
+    (26) expr -> expr . PLUS expr
+    SEMICOLON       shift and go to state 56
+    NE              shift and go to state 27
+    EQ              shift and go to state 28
+    GT              shift and go to state 29
+    LT              shift and go to state 30
+    DIVIDE          shift and go to state 31
+    TIMES           shift and go to state 32
+    MINUS           shift and go to state 33
+    PLUS            shift and go to state 34
+
+
+state 53
+
+    (5) statement -> FUNC LPAREN params RPAREN statements .
+    (3) statements -> statements . statement
+    (5) statement -> . FUNC LPAREN params RPAREN statements
+    (6) statement -> . IF expr statements ELSE statements
+    (7) statement -> . RETURN expr SEMICOLON
+    (8) statement -> . LET ID ASSIGN expr SEMICOLON
+  ! shift/reduce conflict for FUNC resolved as shift
+  ! shift/reduce conflict for IF resolved as shift
+  ! shift/reduce conflict for RETURN resolved as shift
+  ! shift/reduce conflict for LET resolved as shift
+    $end            reduce using rule 5 (statement -> FUNC LPAREN params RPAREN statements .)
+    RBRACE          reduce using rule 5 (statement -> FUNC LPAREN params RPAREN statements .)
+    ELSE            reduce using rule 5 (statement -> FUNC LPAREN params RPAREN statements .)
+    FUNC            shift and go to state 5
+    IF              shift and go to state 6
+    RETURN          shift and go to state 7
+    LET             shift and go to state 8
+
+    statement                      shift and go to state 9
+
+state 54
+
+    (10) params -> params COMMA param .
+    RPAREN          reduce using rule 10 (params -> params COMMA param .)
+    COMMA           reduce using rule 10 (params -> params COMMA param .)
+
+
+state 55
+
+    (6) statement -> IF expr statements ELSE statements .
+    (3) statements -> statements . statement
+    (5) statement -> . FUNC LPAREN params RPAREN statements
+    (6) statement -> . IF expr statements ELSE statements
+    (7) statement -> . RETURN expr SEMICOLON
+    (8) statement -> . LET ID ASSIGN expr SEMICOLON
+  ! shift/reduce conflict for FUNC resolved as shift
+  ! shift/reduce conflict for IF resolved as shift
+  ! shift/reduce conflict for RETURN resolved as shift
+  ! shift/reduce conflict for LET resolved as shift
+    $end            reduce using rule 6 (statement -> IF expr statements ELSE statements .)
+    RBRACE          reduce using rule 6 (statement -> IF expr statements ELSE statements .)
+    ELSE            reduce using rule 6 (statement -> IF expr statements ELSE statements .)
+    FUNC            shift and go to state 5
+    IF              shift and go to state 6
+    RETURN          shift and go to state 7
+    LET             shift and go to state 8
+
+    statement                      shift and go to state 9
+
+state 56
+
+    (8) statement -> LET ID ASSIGN expr SEMICOLON .
+    FUNC            reduce using rule 8 (statement -> LET ID ASSIGN expr SEMICOLON .)
+    IF              reduce using rule 8 (statement -> LET ID ASSIGN expr SEMICOLON .)
+    RETURN          reduce using rule 8 (statement -> LET ID ASSIGN expr SEMICOLON .)
+    LET             reduce using rule 8 (statement -> LET ID ASSIGN expr SEMICOLON .)
+    $end            reduce using rule 8 (statement -> LET ID ASSIGN expr SEMICOLON .)
+    RBRACE          reduce using rule 8 (statement -> LET ID ASSIGN expr SEMICOLON .)
+    ELSE            reduce using rule 8 (statement -> LET ID ASSIGN expr SEMICOLON .)
 
 
 Conflicts:
 
-shift/reduce conflict for IF in state 46 resolved as shift
-shift/reduce conflict for RETURN in state 46 resolved as shift
-shift/reduce conflict for LET in state 46 resolved as shift
+shift/reduce conflict for FUNC in state 53 resolved as shift
+shift/reduce conflict for IF in state 53 resolved as shift
+shift/reduce conflict for RETURN in state 53 resolved as shift
+shift/reduce conflict for LET in state 53 resolved as shift
+shift/reduce conflict for FUNC in state 55 resolved as shift
+shift/reduce conflict for IF in state 55 resolved as shift
+shift/reduce conflict for RETURN in state 55 resolved as shift
+shift/reduce conflict for LET in state 55 resolved as shift
