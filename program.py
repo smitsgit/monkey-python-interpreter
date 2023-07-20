@@ -115,28 +115,20 @@ class CalcParser(Parser):
     def blk_statements(self, p):
         return p.statements
 
-    # @_('let_statement')
-    # def statement(self, p):
-    #     return [p.statement]
-    #
-    # @_('return_statement')
-    # def statement(self, p):
-    #     return [p.statement]
-    #
-    # @_('if_statement')
-    # def statement(self, p):
-    #     return [p.statement]
+    @_('let_statement', 'return_statement', 'if_statement')
+    def statement(self, p):
+        return p[0]
 
     @_('LET ID ASSIGN expr SEMICOLON')
-    def statement(self, p):
+    def let_statement(self, p):
         return ('let', p.ID ,p.expr)
 
     @_('RETURN expr SEMICOLON')
-    def statement(self, p):
+    def return_statement(self, p):
         return ('return', p.expr)
 
     @_('IF expr statements ELSE statements')
-    def statement(self, p):
+    def if_statement(self, p):
         return ('if', p.expr, p.statements0, p.statements1)
 
     @_('FUNC LPAREN params RPAREN statements')
