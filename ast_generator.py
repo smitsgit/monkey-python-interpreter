@@ -1,11 +1,3 @@
-# -- sample
-code = '''
-let five = 5; let ten = 10;
-let add = fn(x, y) { x + y;
-};
-let result = add(five, ten);
-'''
-
 from sly import Lexer, Parser
 
 
@@ -71,24 +63,79 @@ class CalcLexer(Lexer):
         self.nesting_level = 0
 
 
-# -- Grammer
-'''
-program : statements 
+class Node:
+    pass
 
-statements : statements statement 
-           | statement 
 
-statement : let_statement  | if_statement | return_statement
+class BinOpExpression(Node):
+    def __init__(self, op, left, right):
+        self.op = op
+        self.left = left
+        self.right = right
 
-let_statement: LET ID EQ expr
 
-if_statement: if (expr) LBRACE statements RBRACE else LBRACE statements RBRACE         
+class Number(Node):
+    def __init__(self, value):
+        self.value = value
 
-'''
+    def __repr__(self):
+        return f"{type(self).__name__}(value={self.value})"
+
+
+class LetStatement(Node):
+    def __init__(self, name, expr):
+        self.name = name
+        self.expr = expr
+
+    def __repr__(self):
+        return f"{type(self).__name__}(name={self.name}, expr={self.expr})"
+
+
+class ReturnStatement(Node):
+    def __init__(self, expr):
+        self.expr = expr
+
+    def __repr__(self):
+        return f"{type(self).__name__}(expr={self.expr})"
+
+
+class IfStatement(Node):
+    def __init__(self, condition, consequence, alternative):
+        self.condition = condition
+        self.consequence = consequence
+        self.alternative = alternative
+
+    def __repr__(self):
+        return f"{type(self).__name__}(condition={self.condition}," \
+               f" consequence={self.consequence}, alternative={self.alternative})"
+
+
+class FuncLiteral(Node):
+    def __init__(self, params, statements):
+        self.params = params
+        self.statements = statements
+
+    def __repr__(self):
+        return f"{type(self).__name__}(params={self.params}," \
+               f" statements={self.statements})"
+
+
+class CallExpression(Node):
+    def __init__(self, identifier, params):
+        self.identifier = identifier
+        self.params = params
+
+    def __repr__(self):
+        return f"{type(self).__name__}(identifier={self.identifier}, params={self.params})"
+
+
+class Boolean(Node):
+    def __init__(self, value):
+        self.value = value
 
 
 class CalcParser(Parser):
-    debugfile = 'parser.out'
+    debugfile = 'parser1.out'
     tokens = CalcLexer.tokens
 
     precedence = (
@@ -115,29 +162,33 @@ class CalcParser(Parser):
     def blk_statements(self, p):
         return p.statements
 
-    @_('ID LPAREN exprlist RPAREN')
-    def statement(self, p):
-        return ('call-expression', p.ID, p.exprlist)
-
     @_('let_statement', 'return_statement', 'if_statement')
     def statement(self, p):
         return p[0]
 
+    @_('ID LPAREN exprlist RPAREN')
+    def statement(self, p):
+        return CallExpression(p.ID, p.exprlist)
+
     @_('LET ID ASSIGN expr SEMICOLON')
     def let_statement(self, p):
-        return ('let', p.ID ,p.expr)
+        # return ('let', p.ID, p.expr)
+        return LetStatement(p.ID, p.expr)
 
     @_('RETURN expr SEMICOLON')
     def return_statement(self, p):
-        return ('return', p.expr)
+        # return ('return', p.expr)
+        return ReturnStatement(p.expr)
 
     @_('IF expr statements ELSE statements')
     def if_statement(self, p):
-        return ('if', p.expr, p.statements0, p.statements1)
+        # return ('if', p.expr, p.statements0, p.statements1)
+        return IfStatement(condition=p.expr, consequence=p.statements0, alternative=p.statements1)
 
     @_('FUNC LPAREN params RPAREN statements')
     def statement(self, p):
-        return ('function', p.params, p.statements)
+        # return ('function', p.params, p.statements)
+        return FuncLiteral(p.params, p.statements)
 
     @_('params COMMA param')
     def params(self, p):
@@ -153,7 +204,7 @@ class CalcParser(Parser):
 
     @_('ID LPAREN exprlist RPAREN')
     def expr(self, p):
-        return ('call-expression', p.ID, p.exprlist)
+        return CallExpression(p.ID, p.exprlist)
 
     @_('exprlist COMMA expr')
     def exprlist(self, p):
@@ -165,45 +216,54 @@ class CalcParser(Parser):
 
     @_('expr PLUS expr', 'expr MINUS expr')
     def expr(self, p):
-        return (p[1], p.expr0, p.expr1)
+        # return (p[1], p.expr0, p.expr1)
+        return BinOpExpression(p[1], p.expr0, p.expr1)
 
     @_('expr TIMES expr', 'expr DIVIDE expr')
     def expr(self, p):
-        return (p[1], p.expr0, p.expr1)
+        # return (p[1], p.expr0, p.expr1)
+        return BinOpExpression(p[1], p.expr0, p.expr1)
 
     @_('expr LT expr', 'expr GT expr',
        'expr EQ expr', 'expr NE expr')
     def expr(self, p):
-        return (p[1], p.expr0, p.expr1)
+        # return (p[1], p.expr0, p.expr1)
+        return BinOpExpression(p[1], p.expr0, p.expr1)
 
     @_('LPAREN expr RPAREN')
     def expr(self, p):
-        return ('grouped-expression', p.expr)
+        # return ('grouped-expression', p.expr)
+        return p.expr
 
     @_('MINUS expr %prec UMINUS')
     def expr(self, p):
-        return ('-', p.expr)
+        # return ('-', p.expr)
+        return -p.expr
 
     @_('NOT expr')
     def expr(self, p):
-        return ('!', p.expr)
+        # return ('!', p.expr)
+        return not p.expr
 
     @_('TRUE', 'FALSE')
     def expr(self, p):
-        return ('Bool', p[0])
+        # return ('Bool', p[0])
+        return Boolean(p[0])
 
     @_('NUMBER')
     def expr(self, p):
-        return ('num', p.NUMBER)
+        # return ('num', p.NUMBER)
+        return Number(p.NUMBER)
 
     @_('ID')
     def expr(self, p):
-        return ('id', p.ID)
+        # return ('id', p.ID)
+        return p.ID
 
 
 if __name__ == '__main__':
     data = '''
-       add(10, 10)
+       let five = add(5, 10);
 '''
     lexer = CalcLexer()
     for tok in lexer.tokenize(data):
@@ -211,13 +271,3 @@ if __name__ == '__main__':
 
     parser = CalcParser()
     print(parser.parse(lexer.tokenize(data)))
-
-# ('let', ('num', 5), 'return', ('num', 5))
-# [('let', ('num', 5)), ('return', ('num', 5))]
-
-# group let five = (5 + 4) * 2;
-# [('let', ('*', ('+', ('num', 5), ('num', 4)), ('num', 2))), ('return', ('num', 5))]
-
-# regular let five = 5 + 4 * 2;
-# [('let', ('+', ('num', 5), ('*', ('num', 4), ('num', 2)))), ('return', ('num', 5))]
-
