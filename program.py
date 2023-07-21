@@ -125,7 +125,7 @@ class CalcParser(Parser):
 
     @_('LET ID ASSIGN expr SEMICOLON')
     def let_statement(self, p):
-        return ('let', p.ID ,p.expr)
+        return ('let', p.ID, p.expr)
 
     @_('RETURN expr SEMICOLON')
     def return_statement(self, p):
@@ -203,7 +203,7 @@ class CalcParser(Parser):
 
 if __name__ == '__main__':
     data = '''
-       add(10, 10)
+       if (5 > 0) { return 5 + 5; } else { return 10; }
 '''
     lexer = CalcLexer()
     for tok in lexer.tokenize(data):
@@ -211,6 +211,7 @@ if __name__ == '__main__':
 
     parser = CalcParser()
     print(parser.parse(lexer.tokenize(data)))
+
 
 # ('let', ('num', 5), 'return', ('num', 5))
 # [('let', ('num', 5)), ('return', ('num', 5))]
@@ -220,4 +221,5 @@ if __name__ == '__main__':
 
 # regular let five = 5 + 4 * 2;
 # [('let', ('+', ('num', 5), ('*', ('num', 4), ('num', 2)))), ('return', ('num', 5))]
+
 

@@ -37,10 +37,10 @@ Rule 33    exprlist -> exprlist COMMA expr
 
 Unused terminals:
 
-    GE
-    LE
     PRINT
     WHILE
+    GE
+    LE
 
 Terminals, with rules where they appear:
 
